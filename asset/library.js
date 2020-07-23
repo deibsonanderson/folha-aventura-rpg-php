@@ -271,72 +271,134 @@ function fcnCarregarModalIncluirCriatura(heroi_id){
 	$('#modal-manter-criatura').modal('show');
 }
 
-function fcnCarregarModalCriatura(element) {
-	$('#modal-criatura-id').val($(element).attr('criatura-id'));
-	$('#modal-criatura-nome').val($(element).attr('nome'));
-	$('#modal-criatura-habilidade').val($(element).attr('habilidade'));
-	$('#modal-criatura-energia').val($(element).attr('energia'));
-	$('#modal-manter-criatura').modal('show');
-}
-
-function fcnDeletarModalCriatura(id){
-	if(id == null || id == undefined || id == ''){
-		id = $('#modal-criatura-id').val();	
-	}	
-	$('#modal-manter-criatura').modal('hide');
-	
-    $.ajax({
-        url: 'controlador.php',
-        type: 'POST',
-        data: 'controlador=ControladorCriatura&funcao=excluirCriatura&id='+id,
-        success: function(result) {
-        	$('#list-criatura-'+id).fadeOut( "slow", function() {});        	
-    	},
-        beforeSend: function() {},
-        complete: function() {},
-        error: function (request, status, error) {
-        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
-        }
-    });
-}
-
-function fcnAtualizarModalCriatura(){
-	id = $('#modal-criatura-id').val();
+function fcnIniciarBatalhaModalCriatura(){
 	nome = $('#modal-criatura-nome').val();
 	habilidade = $('#modal-criatura-habilidade').val();
 	energia = $('#modal-criatura-energia').val();
 	heroi_id = $('#modal-criatura-heroi_id').val();
 	$('#modal-manter-criatura').modal('hide');
+	$('#criatura-luta-resultado').html('');
+	$('#heroi-luta-resultado').html('');
+	$('#status-batalha').val(0);
+	$('#criatura-luta-nome').html(nome);
+	$('#criatura-luta-energia').html(energia);
+	$('#criatura-luta-habilidade').html(habilidade);
+	decorarSorte(3);
+}
+
+function fcnBatalhar(heroiId){
+	energiaHeroi = parseInt($('#heroi-luta-energia').html());
+	energiaCriatura = parseInt($('#criatura-luta-energia').html());
 	
-	if(id == null || id == undefined || id == ""){
-		funcao = 'incluirCriatura';
-	}else{
-		funcao = 'alterarCriatura';
+	habilidadeHeroi = parseInt($('#heroi-luta-habilidade').html());
+	habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());
+	
+	valorCriatura = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura;
+	valorHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi;
+
+	$('#criatura-luta-resultado').html(valorCriatura);
+	$('#heroi-luta-resultado').html(valorHeroi);
+	
+	if(valorCriatura > valorHeroi){
+		energiaHeroi = energiaHeroi-2;
+		
+		decorarSorte(2);
+		
+		$('#status-energia').val(energiaHeroi);
+		$('#heroi-luta-energia').html(energiaHeroi);
+		$('#status-batalha').val(2);
+		$.ajax({
+	        url: 'controlador.php',
+	        type: 'POST',
+	        data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergia&valor=' + energiaHeroi + '&heroi_id='+heroiId,
+	        success: function(result) {},
+	        beforeSend: function() {},
+	        complete: function() {},
+	        error: function (request, status, error) {}
+	    });
+
+		
+	}else if(valorCriatura < valorHeroi){
+		energiaCriatura = energiaCriatura-2;
+		
+		decorarSorte(1);
+		$('#criatura-luta-energia').html(energiaCriatura);
+		$('#status-batalha').val(1);
+	}else if(valorCriatura == valorHeroi){
+		decorarSorte(3);
 	}
 	
-    $.ajax({
+}
+
+function decorarSorte(key){
+	$('#heroi-luta-energia').removeClass('text-success');
+	$('#criatura-luta-energia').removeClass('text-success');
+	$('#criatura-luta-energia').removeClass('text-danger');
+    $('#heroi-luta-energia').removeClass('text-danger');
+
+	switch (key) {
+		case 1:
+			$('#criatura-luta-energia').addClass('text-danger');
+			$('#heroi-luta-energia').addClass('text-success');
+			break;
+		case 2:
+			$('#heroi-luta-energia').addClass('text-danger');
+			$('#criatura-luta-energia').addClass('text-success');
+			break;			
+		default:
+		break;
+	}
+
+}
+
+function fcnTestarSorte(heroiId){
+	energiaHeroi = parseInt($('#heroi-luta-energia').html());
+	energiaCriatura = parseInt($('#criatura-luta-energia').html());
+	sorteHeroi = parseInt($('#heroi-luta-sorte').html());
+	statusBatalha = $('#status-batalha').val();
+	valorHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1);
+
+	$('#criatura-luta-resultado').html('');
+	$('#heroi-luta-resultado').html(valorHeroi);
+	
+	if(statusBatalha == 1){ //Bateu
+		if(valorHeroi <= sorteHeroi){ //BOM
+			decorarSorte(1);
+			energiaCriatura = energiaCriatura-1;		
+			$('#criatura-luta-energia').html(energiaCriatura);
+		}else{ //RUIM
+			decorarSorte(2);
+			energiaCriatura = energiaCriatura+1;		
+			$('#criatura-luta-energia').html(energiaCriatura);
+		}
+	}else if(statusBatalha == 2){ //Apanhou
+		if(valorHeroi <= sorteHeroi){ //BOM
+			energiaHeroi = energiaHeroi+1;
+			decorarSorte(1);
+			$('#status-energia').val(energiaHeroi);
+			$('#heroi-luta-energia').html(energiaHeroi);
+		}else{ //RUIM
+			decorarSorte(2);
+			energiaHeroi = energiaHeroi-1;
+			$('#status-energia').val(energiaHeroi);
+			$('#heroi-luta-energia').html(energiaHeroi);
+		}
+	}
+	
+	sorteHeroi = sorteHeroi-1;
+	$('#heroi-luta-sorte').html(sorteHeroi);
+	$('#status-sorte').val(sorteHeroi);
+	$('#status-batalha').val(0);
+	
+	$.ajax({
         url: 'controlador.php',
         type: 'POST',
-        data: 'controlador=ControladorCriatura&funcao='+funcao+'&energia=' + energia + '&id=' + id + '&nome=' + nome + '&habilidade=' + habilidade + '&heroi_id='+heroi_id,
-        success: function(result) {
-        	 if(funcao == 'incluirCriatura'){
-        		 addCriatura(parseInt(result), nome, habilidade, energia, heroi_id, nome);
-        	 }else{
-            	 $('#criatura-'+id).attr('nome',nome);
-        		 $('#criatura-'+id).attr('energia',energia);
-        		 $('#criatura-'+id).attr('habilidade',habilidade);        		 
-        		 $('#criatura-td-nome-'+id).html(nome);
-        		 $('#criatura-td-energia-'+id).html(energia);
-        		 $('#criatura-td-habilidade-'+id).html(habilidade);        		 
-        	 }
-        },
+        data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergiaSorte&energia=' + energiaHeroi + '&sorte=' + sorteHeroi + '&heroi_id='+heroiId,
+        success: function(result) {},
         beforeSend: function() {},
         complete: function() {},
-        error: function (request, status, error) {
-        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
-        }
-    });
-	
+        error: function (request, status, error) {}
+    });	
 }
 
 

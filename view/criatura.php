@@ -1,75 +1,79 @@
-<?php 
-$sql = "SELECT id,
-		nome,
-		habilidade,
-		energia,
-     	status
-		FROM tb_aventura_criatura
-WHERE heroi_id = ".$heroi->heroi_id. " ORDER BY id DESC ";
-$query = mysqli_query($conexao,$sql) or die('erro listar criatuas');
-while ($objItem = mysqli_fetch_object($query)) {
-   $criaturas[] = $objItem;
-}
-?>
 <div class="tab-pane fade" id="enemy" role="tabpanel"
 	aria-labelledby="enemy-tab">
 	<div class="card bg-dark text-white">
 		<div class="card-body">
 			<h5 class="card-title">
-				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">+</a>
+				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">Resetar Luta</a>
+				<input type="hidden" class="form-control" id="status-batalha" value="0" >
 			</h5>
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="list-group" id="list-group-criatura">
-					<?php 
-					
-					if ($criaturas != null && count($criaturas) > 0 ) {
-					    foreach ($criaturas as $criatura) {
-                    ?>   						
-						<li class="list-group-item bg-dark text-white border border-light" id="list-criatura-<?php echo $criatura->id; ?>">
+						<li class="list-group-item bg-dark text-white border border-light">
 							<table>
 								<tr>
 									<td style="min-width: 270px; text-align: center;" colspan="2">
 										<div class="btn-toolbar justify-content-between"
 											role="toolbar" aria-label="Toolbar with button groups">
 											<div class="btn-group" role="group" aria-label="First group">
-												<h5 style="margin-top: 5px;" id="criatura-td-nome-<?php echo $criatura->id; ?>" ><?php echo $criatura->nome; ?></h5>
-											</div>
-											<div class="input-group">
-												<button type="button" 
-														onclick="fcnCarregarModalCriatura(this);" 
-						    							nome="<?php echo $criatura->nome; ?>"
-						        						habilidade="<?php echo $criatura->habilidade; ?>"
-						                				energia="<?php echo $criatura->energia; ?>"
-						                				criatura-id="<?php echo $criatura->id; ?>"
-						                				heroi_id="<?php echo $heroi->heroi_id; ?>"
-						                				id="criatura-<?php echo $criatura->id; ?>"
-														class="btn btn-danger" >Editar</button>
-											</div>
+												<h5 style="margin-top: 5px;" >Herói</h5>
+											</div>											
 										</div>
 									</td>
 								</tr>
 								<tr>
 									<td style="min-width: 135px;">Habilidade:</td>
-									<td style="min-width: 135px; text-align: right;"><b id="criatura-td-habilidade-<?php echo $criatura->id; ?>"><?php echo $criatura->habilidade; ?></b></td>
+									<td style="min-width: 135px; text-align: right;"><b id="heroi-luta-habilidade"><?php echo $heroi->habilidade; ?></b></td>
 								</tr>
 								<tr>
 									<td>Energia:</td>
-									<td style="text-align: right;"><b id="criatura-td-energia-<?php echo $criatura->id; ?>"><?php echo $criatura->energia; ?></b></td>
+									<td style="text-align: right;"><b id="heroi-luta-energia"><?php echo $heroi->energia; ?></b></td>
+								</tr>
+								<tr>
+									<td>Sorte:</td>
+									<td style="text-align: right;"><b id="heroi-luta-sorte"><?php echo $heroi->sorte; ?></b></td>
+								</tr>
+								<tr>
+									<td>Resultado rodada: </td>
+									<td style="text-align: right;"><b id="heroi-luta-resultado"></b></td>
+								</tr>								
+							</table>
+						</li>
+						
+						<li class="list-group-item bg-dark text-white border border-light">
+							<table>
+								<tr>
+									<td style="min-width: 270px; text-align: center;" colspan="2">
+										<div class="btn-toolbar justify-content-between"
+											role="toolbar" aria-label="Toolbar with button groups">
+											<div class="btn-group" role="group" aria-label="First group">
+												<h5 style="margin-top: 5px;" id="criatura-luta-nome"></h5>
+											</div>											
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td style="min-width: 135px;">Habilidade:</td>
+									<td style="min-width: 135px; text-align: right;"><b id="criatura-luta-habilidade"></b></td>
+								</tr>
+								<tr>
+									<td>Energia:</td>
+									<td style="text-align: right;"><b id="criatura-luta-energia"></b></td>
+								</tr>
+								<tr>
+									<td>Resultado rodada: </td>
+									<td style="text-align: right;"><b id="criatura-luta-resultado"></b></td>
 								</tr>
 								<tr>
 									<td style="min-width: 270px; text-align: center;" colspan="2">
 										<div class="btn-group" role="group" aria-label="">
-											<button type="button" style="margin-top: 10px;" onclick="fncAlterarEnergiaCriatura(<?php echo $criatura->id; ?>,'criatura-td-energia-<?php echo $criatura->id; ?>',0)" class="btn btn-secondary">Menos (-)</button>
-											<button type="button" style="margin-top: 10px;" onclick="fncAlterarEnergiaCriatura(<?php echo $criatura->id; ?>,'criatura-td-energia-<?php echo $criatura->id; ?>',1)" class="btn btn-secondary">Mais (+)</button>
+											<button type="button" style="margin-top: 10px;" onclick="fcnTestarSorte(<?php echo $heroi->heroi_id; ?>)" class="btn btn-secondary">Tentar Sorte</button>
+											<button type="button" style="margin-top: 10px;" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Batalhar</button>
 										</div>
 									</td>
-								</tr>
+								</tr>								
 							</table>
-						</li>
-						<?php }
-					       } 
-					   ?>
+						</li>						
 					</ul>
 				</div>
 			</div>

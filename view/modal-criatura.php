@@ -9,12 +9,11 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="modal-criatura-id" >
 				<input type="hidden" class="form-control" id="modal-criatura-heroi_id" >
 				<div class="form-group">
 					<label for="exampleFormControlInput1">Nome</label> <input
 						type="text" class="form-control" id="modal-criatura-nome"
-						placeholder="Moedas de Ouro">
+						placeholder="Monstro" value="Monstro">
 				</div>
 				<div class="form-group">
 					<label for="button-addon4" class="">Habilidade:</label>
@@ -47,8 +46,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" onclick="fcnAtualizarModalCriatura();" class="btn btn-primary">Save</button>
-				<button type="button" onclick="fcnDeletarModalCriatura();" class="btn btn-danger">Excluir</button>
+				<button type="button" onclick="fcnIniciarBatalhaModalCriatura();" class="btn btn-danger">Confirmar</button>
 			</div>
 		</div>
 	</div>

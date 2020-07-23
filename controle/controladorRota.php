@@ -50,6 +50,7 @@ class ControladorRota
     }
     
     public function telaListaRota($post) {
+        $html = '';
         try {
             $rotas = $this->listarRota($post['heroi_id']);
             if ($rotas != null && count($rotas) > 0 ) {
@@ -67,30 +68,30 @@ class ControladorRota
                     }
                     
                     if($key > 0){
-                        ?>
-                        <div class="row timeline rota-<?php echo $rota->getId(); ?>">
-                        	<div class="col-2 rota-<?php echo $rota->getId(); ?>">
-                        		<div class="corner <?php echo $cornerCima; ?>"></div>
-                        	</div>
-                        	<div class="col-8 rota-<?php echo $rota->getId(); ?>">
-                        		<hr />
-                        	</div>
-                        	<div class="col-2 rota-<?php echo $rota->getId(); ?>">
-                        		<div class="corner <?php echo $cornerBaixo; ?>"></div>
-                        	</div>
-                        </div>			
-    <?php           } ?>
-    		<div class="row align-items-center how-it-works d-flex <?php echo $justify; ?> rota-<?php echo $rota->getId(); ?>">
-    			<div class="col-2 text-center <?php echo $full; ?> d-inline-flex justify-content-center align-items-center rota-<?php echo $rota->getId(); ?>">
-    				<div onclick="fcnCarregarModalRota(<?php echo $rota->getId(); ?>,<?php echo $rota->getHeroiId(); ?> );" class="circle font-weight-bold rota-<?php echo $rota->getId(); ?>"><?php echo $rota->getRota(); ?></div>
-    			</div>
-    		</div>   		
-    		<?php    		      
+                        $html .= '<div class="row timeline rota-'.$rota->getId().'">';
+                            $html .= '<div class="col-2 rota-'.$rota->getId().'">';
+                                $html .= '<div class="corner '.$cornerCima.'"></div>';
+                            $html .= '</div>';
+                            $html .= '<div class="col-8 rota-'.$rota->getId().'">';
+                                $html .= '<hr />';
+                            $html .= '</div>';
+                            $html .= '<div class="col-2 rota-'.$rota->getId().'">';
+                                $html .= '<div class="corner '.$cornerBaixo.'"></div>';
+                            $html .= '</div>';
+                        $html .= '</div>';
+                        
+                    }                
+                        $html .= '<div class="row align-items-center how-it-works d-flex '.$justify.' rota-'.$rota->getId().'">';
+                			$html .= '<div class="col-2 text-center '.$full.' d-inline-flex justify-content-center align-items-center rota-'.$rota->getId().'">';
+                				$html .= '<div onclick="fcnCarregarModalRota('.$rota->getId().','.$rota->getHeroiId().');" class="circle font-weight-bold rota-'.$rota->getId().'">'.$rota->getRota().'</div>';
+                			$html .= '</div>';
+                		$html .= '</div>';   		
                 }
     		}
         } catch (Exception $e) {
             return $e;
         }
+        return $html;
     }
 
 }
