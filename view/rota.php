@@ -40,7 +40,7 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
 
     <div class="card bg-dark text-white">
     	<input id="position-rota" type="hidden" value="1">
-    	<div id="div-card-body" class="card-body" style="padding-left: 50px; padding-right: 50px; overflow: auto; height: 300px;">
+    	<div id="div-rota-card-body" class="card-body" style="padding-left: 50px; padding-right: 50px; overflow: auto; height: 300px;">
     		<?php 
     		if ($rotas != null && count($rotas) > 0 ) {
     		    foreach ($rotas as $key => $rota) {
@@ -58,28 +58,27 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
     		        
     		        if($key > 0){
     ?>
-                		<div class="row timeline">
-                        	<div class="col-2">
+                		<div class="row timeline rota-<?php echo $rota->id; ?>">
+                        	<div class="col-2 rota-<?php echo $rota->id; ?>">
                         		<div class="corner <?php echo $cornerCima; ?>"></div>
                         	</div>
-                        	<div class="col-8">
+                        	<div class="col-8 rota-<?php echo $rota->id; ?>">
                         		<hr />
                         	</div>
-                        	<div class="col-2">
+                        	<div class="col-2 rota-<?php echo $rota->id; ?>">
                         		<div class="corner <?php echo $cornerBaixo; ?>"></div>
                         	</div>
                         </div>			
     <?php           } ?>
-    		<div class="row align-items-center how-it-works d-flex <?php echo $justify; ?>">
-    			<div
-    				class="col-2 text-center <?php echo $full; ?> d-inline-flex justify-content-center align-items-center">
-    				<div class="circle font-weight-bold"><?php echo $rota->rota; ?></div>
+    		<div class="row align-items-center how-it-works d-flex <?php echo $justify; ?> rota-<?php echo $rota->id; ?>">
+    			<div class="col-2 text-center <?php echo $full; ?> d-inline-flex justify-content-center align-items-center rota-<?php echo $rota->id; ?>">
+    				<div onclick="fcnCarregarModalRota(<?php echo $rota->id; ?>, <?php echo $heroi->heroi_id; ?>);" class="circle font-weight-bold rota-<?php echo $rota->id; ?>"><?php echo $rota->rota; ?></div>
     			</div>
     		</div>   		
-    		<?php 
+    		<?php    		      
                 }
     		}
-    		?>
+    		?>    		
     	</div>
     </div>
 </div>

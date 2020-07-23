@@ -17,7 +17,6 @@ function vibracao(time){
 function rolarDado(){
 	$('#imagem-dado').attr('src','image/dado-animado.gif');
 	diceSound = document.getElementById("myAudio"); 
-	
 	qtdDados = parseInt($('#input-dados').val());
 	if(qtdDados > 0){
 		diceSound.play();
@@ -35,14 +34,13 @@ function rolarDado(){
 				}
 				$('#dado-result-total').html('Resultado total: <b>'+total+'</b>');
 				$('#imagem-dado').attr('src','image/dado-static.png');
-		}, 1000);
+		}, 1500);
 	}else{
 		$('#dado-result-total').html('Resultado total: inválido!');
-	}	
-
-
+	}
 }
 
+//HEROI INICIO
 function fncAlterarHeroi(element, campo, propriedade){
     controlador = $(element).attr('controlador');
     funcao = $(element).attr('funcao');
@@ -86,7 +84,7 @@ function fncIncluirRotaHeroi(element, campo){
         type: 'POST',
         data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&rota=' + rota + '&heroi_id='+heroi_id,
         success: function(result) {
-        	fcnAddTimeLineRota(rota);
+        	fcnAddTimeLineRota(rota, parseInt(result), heroi_id);
         	$('#'+campo).val('');        	
         },
         beforeSend: function() {},
@@ -97,20 +95,50 @@ function fncIncluirRotaHeroi(element, campo){
     });
 }
 
-function fcnAddTimeLineRota(rota){
+//HEROI FIM
+//ROTA INICIO
+function fcnAddTimeLineRota(rota, id, heroi_id){
 	position = $('#position-rota').val();
 	if(position == 0){
 		$('#position-rota').val(1);
-		html = '<div class="row align-items-center justify-content-end how-it-works d-flex"><div class="col-2 text-center full d-inline-flex justify-content-center align-items-center"><div class="circle font-weight-bold">'+rota+'</div></div></div><div class="row timeline"><div class="col-2"><div class="corner right-bottom"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner top-left"></div></div></div>';
+		html = '<div class="row align-items-center justify-content-end how-it-works d-flex"><div class="col-2 text-center full d-inline-flex justify-content-center align-items-center"><div onclick="fcnCarregarModalRota('+id+','+heroi_id+');" class="circle font-weight-bold">'+rota+'</div></div></div><div class="row timeline"><div class="col-2"><div class="corner right-bottom"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner top-left"></div></div></div>';
 	}else{
 		$('#position-rota').val(0);
-		html = '<div class="row align-items-center how-it-works d-flex"><div class="col-2 text-center bottom d-inline-flex justify-content-center align-items-center"><div class="circle font-weight-bold">'+rota+'</div></div></div><div class="row timeline"><div class="col-2"><div class="corner top-right"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner left-bottom"></div></div></div>';
+		html = '<div class="row align-items-center how-it-works d-flex"><div class="col-2 text-center bottom d-inline-flex justify-content-center align-items-center"><div onclick="fcnCarregarModalRota('+id+','+heroi_id+');"  class="circle font-weight-bold">'+rota+'</div></div></div><div class="row timeline"><div class="col-2"><div class="corner top-right"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner left-bottom"></div></div></div>';
 
 	}
-	$('#div-card-body').prepend(html);
+	$('#div-rota-card-body').prepend(html);
+}
+
+function fcnCarregarModalRota(id,heroiId) {
+	$('#modal-rota-id').val(id);
+	$('#modal-rota-heroi_id').val(heroiId);
+	$('#modal-manter-rota').modal('show');
+}
+
+function fcnDeletarModalRota(){
+	id = $('#modal-rota-id').val();	
+	heroiId = $('#modal-rota-heroi_id').val();	 	
+	$('#modal-manter-rota').modal('hide');
+	
+    $.ajax({
+        url: 'controlador.php',
+        type: 'POST',
+        data: 'controlador=ControladorRota&funcao=excluirRota&heroi_id='+heroiId+'&id='+id,
+        success: function(result) {
+        	$('#div-rota-card-body').html(result);
+    	},
+        beforeSend: function() {},
+        complete: function() {},
+        error: function (request, status, error) {
+        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
+        }
+    });
 }
 
 
+//ROTA FIM
+//INVENTARIO INICIO
 function fcnCarregarModalInvent(element) {
 	$('#modal-invent-id').val($(element).attr('inventario-id'));
 	$('#modal-invent-descricao').val($(element).attr('descricao'));
@@ -232,9 +260,9 @@ function fcnDeletarModalInvent(id) {
         }
     });
 }
+//INVENTARIO FIM
 
-
-//CRIATURA
+//CRIATURA INICIO
 function fcnCarregarModalIncluirCriatura(heroi_id){
 	$('#modal-criatura-nome').val('');
 	$('#modal-criatura-habilidade').val(0);
@@ -390,3 +418,4 @@ function addCriatura(id, nome, habilidade, energia, heroi_id, nome){
 	 $('#list-group-criatura').prepend($html);
 	
 }
+//CRIATURA FIM
