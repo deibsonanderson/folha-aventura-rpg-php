@@ -5,7 +5,7 @@ $sql = "SELECT id,
 		energia,
      	status
 		FROM tb_aventura_criatura
-WHERE heroi_id = ".$heroi->heroi_id;
+WHERE heroi_id = ".$heroi->heroi_id. " ORDER BY id DESC ";
 $query = mysqli_query($conexao,$sql) or die('erro listar criatuas');
 while ($objItem = mysqli_fetch_object($query)) {
    $criaturas[] = $objItem;
@@ -13,21 +13,20 @@ while ($objItem = mysqli_fetch_object($query)) {
 ?>
 <div class="tab-pane fade" id="enemy" role="tabpanel"
 	aria-labelledby="enemy-tab">
-	<div class="card">
+	<div class="card bg-dark text-white">
 		<div class="card-body">
 			<h5 class="card-title">
-				<a href="#" class="btn btn-primary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">+</a>
+				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">+</a>
 			</h5>
 			<div class="row">
 				<div class="col-md-12">
-					<ul class="list-group">
+					<ul class="list-group" id="list-group-criatura">
 					<?php 
 					
 					if ($criaturas != null && count($criaturas) > 0 ) {
 					    foreach ($criaturas as $criatura) {
-                    ?>   
-						
-						<li class="list-group-item" id="list-criatura-<?php echo $criatura->id; ?>">
+                    ?>   						
+						<li class="list-group-item bg-dark text-white border border-light" id="list-criatura-<?php echo $criatura->id; ?>">
 							<table>
 								<tr>
 									<td style="min-width: 270px; text-align: center;" colspan="2">
@@ -60,9 +59,9 @@ while ($objItem = mysqli_fetch_object($query)) {
 								</tr>
 								<tr>
 									<td style="min-width: 270px; text-align: center;" colspan="2">
-										<div class="btn-group" role="group" aria-label="Basic example">
-											<button type="button" onclick="fncAlterarEnergiaCriatura(<?php echo $criatura->id; ?>,'criatura-td-energia-<?php echo $criatura->id; ?>',0)" class="btn btn-secondary">Menos (-)</button>
-											<button type="button" onclick="fncAlterarEnergiaCriatura(<?php echo $criatura->id; ?>,'criatura-td-energia-<?php echo $criatura->id; ?>',1)" class="btn btn-secondary">Mais (+)</button>
+										<div class="btn-group" role="group" aria-label="">
+											<button type="button" style="margin-top: 10px;" onclick="fncAlterarEnergiaCriatura(<?php echo $criatura->id; ?>,'criatura-td-energia-<?php echo $criatura->id; ?>',0)" class="btn btn-secondary">Menos (-)</button>
+											<button type="button" style="margin-top: 10px;" onclick="fncAlterarEnergiaCriatura(<?php echo $criatura->id; ?>,'criatura-td-energia-<?php echo $criatura->id; ?>',1)" class="btn btn-secondary">Mais (+)</button>
 										</div>
 									</td>
 								</tr>

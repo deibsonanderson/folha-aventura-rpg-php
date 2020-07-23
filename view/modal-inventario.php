@@ -1,9 +1,9 @@
 <div class="modal" id="modal-manter-invent" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content">
+		<div class="modal-content bg-dark text-white">
 			<div class="modal-header">
 				<h5 class="modal-title">Modal Inventario</h5>
-				<button type="button" class="close" data-dismiss="modal"
+				<button type="button" class="close text-white" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -20,12 +20,12 @@
 					<label for="button-addon4" class="">Quantidade:</label>
 					<div class="input-group ">
 						<div class="input-group-prepend">
-							<button class="btn btn-outline-secondary" onclick="fncAlterarNumber('modal-invent-quantidade',0)" type="button">Menos (-)</button>
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('modal-invent-quantidade',0)" type="button">Menos (-)</button>
 						</div>
-						<input type="number" id="modal-invent-quantidade" readonly="true" class="form-control"
+						<input type="number" id="modal-invent-quantidade" readonly="true" class="form-control text-center"
 							placeholder="" aria-label="Example text with two button addons" aria-describedby="button-addon3" value="0">
 						<div class="input-group-append">
-							<button class="btn btn-outline-secondary" onclick="fncAlterarNumber('modal-invent-quantidade',1)" type="button">Mais (+)</button>
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('modal-invent-quantidade',1)" type="button">Mais (+)</button>
 						</div>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" onclick="fcnAtualizarModalInvent();" class="btn btn-primary">Save</button>
-				<button type="button" onclick="fcnDeletarModalInvent();" class="btn btn-warning">Excluir</button>
+				<button type="button" onclick="fcnDeletarModalInvent();" class="btn btn-danger">Excluir</button>
 			</div>
 		</div>
 	</div>

@@ -17,7 +17,9 @@ class ControladorRota
             $rota->setRota($post['rota']);
             $rota->setHeroiId($post['heroi_id']);
             $moduloRota = new DaoRota();
-            $moduloRota->incluirRota($rota);
+            if($post['rota'] != '0' || $post['rota'] != null || $post['rota'] != ''){
+                $moduloRota->incluirRota($rota);
+            }
             $moduloRota->__destruct();
         } catch (Exception $e) {}
     }

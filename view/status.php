@@ -24,7 +24,7 @@ function carregarHeroi($conexao){
 function carregarCampoStatus($id, $funcao, $controlador, $campo, $valor){
 ?>
 <div class="input-group-prepend">
-	<button class="btn btn-outline-secondary" 
+	<button class="btn  btn-secondary" 
 	        onclick="fncAlterarHeroi(this,'<?php echo $campo; ?>',0)" 
 		    funcao="<?php echo $funcao; ?>" 
 		    controlador="<?php echo $controlador; ?>"
@@ -32,11 +32,11 @@ function carregarCampoStatus($id, $funcao, $controlador, $campo, $valor){
 		    retorno="div_retorno" 
 		    type="button">Menos (-)</button>
 </div>
-<input id="<?php echo $campo; ?>" type="number" readonly="true" class="form-control"
+<input id="<?php echo $campo; ?>" type="number" readonly="true" class="form-control text-center"
 	placeholder="" aria-label="Example text with two button addons"
 	aria-describedby="button-addon3" value="<?php echo $valor; ?>">
 <div class="input-group-append">
-	<button class="btn btn-outline-secondary" 
+	<button class="btn  btn-secondary" 
 			onclick="fncAlterarHeroi(this,'<?php echo $campo; ?>',1)" 
 		    funcao="<?php echo $funcao; ?>" 
 		    controlador="<?php echo $controlador; ?>" 
@@ -51,7 +51,7 @@ $heroi = carregarHeroi($conexao);
 ?>
 <div class="tab-pane fade show active" id="status" role="tabpanel"
 	aria-labelledby="status-tab">
-	<div class="card">
+	<div class="card bg-dark text-white">
 		<div class="card-body">
 			<div class="form-row">
 				<div class="col-md-12">
@@ -81,29 +81,7 @@ $heroi = carregarHeroi($conexao);
 						    'ControladorHeroi', 'status-sorte', $heroi->sorte); ?>
 					</div>
 				</div>
-			</div>
-
-			<br />
-			<div class="form-row">
-				<div class="col-md-12">
-					<label for="button-addon4" class="col-md-12">Rota:</label>
-					<div class="input-group col-md-12">
-						<input type="number" class="form-control" id="status-rota"
-							placeholder="" aria-label="Example text with two button addons"
-							aria-describedby="button-addon3">
-						<div class="input-group-append">
-							<button class="btn btn-outline-secondary" 
-									onclick="fncIncluirRotaHeroi(this,'status-rota')" 
-                        		    funcao="incluirRota" 
-                        		    controlador="ControladorRota" 
-                        		    heroi_id="<?php echo $heroi->heroi_id; ?>"
-                        		    retorno="div_retorno"
-							type="button">Incluir</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			</div>			
 		</div>
-	</div>
-	<?php include('view/rota.php'); ?>
+	</div>	
 </div>

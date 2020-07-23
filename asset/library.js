@@ -1,3 +1,48 @@
+function vibracao(time){
+	navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+    if (!navigator.vibrate) {
+        $('#supported').hide();
+        return;
+    }
+
+    $('#unsupported').hide();
+    navigator.vibrate(time);
+  
+//    // Stop all vibrations
+//    $('#stop').click(function () {
+//        navigator.vibrate(0);
+//    });
+}
+
+function rolarDado(){
+	$('#imagem-dado').attr('src','image/dado-animado.gif');
+	diceSound = document.getElementById("myAudio"); 
+	
+	qtdDados = parseInt($('#input-dados').val());
+	if(qtdDados > 0){
+		diceSound.play();
+		//vibracao(500);
+		setTimeout(function(){ 
+				
+				$('#dado-result').html('');
+				total = 0;
+				for(i=1; i<=qtdDados;i++){
+					numero = Math.floor((Math.random() * 6)+1);
+					if(qtdDados > 1){
+						$('#dado-result').append('<span>Dado Nº'+i+' valor = <b>'+numero+'</b></span><br/>');
+					}	
+					total += numero;		
+				}
+				$('#dado-result-total').html('Resultado total: <b>'+total+'</b>');
+				$('#imagem-dado').attr('src','image/dado-static.png');
+		}, 1000);
+	}else{
+		$('#dado-result-total').html('Resultado total: inválido!');
+	}	
+
+
+}
+
 function fncAlterarHeroi(element, campo, propriedade){
     controlador = $(element).attr('controlador');
     funcao = $(element).attr('funcao');
@@ -134,7 +179,7 @@ function fcnAtualizarModalInvent() {
 
 function addInventario(id, descricao, quantidade, heroi_id, tipo){
 	 $html = '';
-	 $html += '<li class="list-group-item d-flex justify-content-between align-items-center"';
+	 $html += '<li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border border-light"';
 		 $html += 'onclick="fcnCarregarModalInvent(this);"';
 			 $html += 'descricao="'+descricao+'"';
 			 $html += 'quantidade="'+quantidade+'"';
@@ -147,34 +192,38 @@ function addInventario(id, descricao, quantidade, heroi_id, tipo){
 	 
 	 switch (tipo) {
 		case '1':
-			$('#list-group-ouro').append($html);		
+			$('#list-group-ouro').prepend($html);		
 			break;
 		case '2':
-			$('#list-group-provicao').append($html);
+			$('#list-group-provicao').prepend($html);
 			break;
 		case '3':
-			$('#list-group-equipamento').append($html);
+			$('#list-group-equipamento').prepend($html);
 			break;
 		case '4':
-			$('#list-group-bonus').append($html);
+			$('#list-group-bonus').prepend($html);
 			break;
 		case '5':
-			$('#list-group-pista').append($html);
+			$('#list-group-pista').prepend($html);
 			break;
 	}	 
 
 }
 
-function fcnDeletarModalInvent() {
-	id = $('#modal-invent-id').val();
+function fcnDeletarModalInvent(id) {
+	if(id == null || id == undefined || id == ''){
+		id = $('#modal-invent-id').val();	
+	}
 	$('#modal-manter-invent').modal('hide');
 	
     $.ajax({
         url: 'controlador.php',
         type: 'POST',
         data: 'controlador=ControladorInventario&funcao=excluirInventario&id='+id,
-        success: function(result) {
-        	 $('#inventario-'+id).remove();
+        success: function(result) {        	 
+        	 $('#inventario-'+id).fadeOut( "slow", function() {
+        		 $('#inventario-'+id).remove();
+        	 });
     	},
         beforeSend: function() {},
         complete: function() {},
@@ -202,8 +251,10 @@ function fcnCarregarModalCriatura(element) {
 	$('#modal-manter-criatura').modal('show');
 }
 
-function fcnDeletarModalCriatura(){
-	id = $('#modal-criatura-id').val();
+function fcnDeletarModalCriatura(id){
+	if(id == null || id == undefined || id == ''){
+		id = $('#modal-criatura-id').val();	
+	}	
 	$('#modal-manter-criatura').modal('hide');
 	
     $.ajax({
@@ -211,7 +262,7 @@ function fcnDeletarModalCriatura(){
         type: 'POST',
         data: 'controlador=ControladorCriatura&funcao=excluirCriatura&id='+id,
         success: function(result) {
-        	 $('#list-criatura-'+id).remove();
+        	$('#list-criatura-'+id).fadeOut( "slow", function() {});        	
     	},
         beforeSend: function() {},
         complete: function() {},
@@ -241,7 +292,7 @@ function fcnAtualizarModalCriatura(){
         data: 'controlador=ControladorCriatura&funcao='+funcao+'&energia=' + energia + '&id=' + id + '&nome=' + nome + '&habilidade=' + habilidade + '&heroi_id='+heroi_id,
         success: function(result) {
         	 if(funcao == 'incluirCriatura'){
-        		 //addInventario(parseInt(result), descricao, quantidade, heroi_id, tipo );
+        		 addCriatura(parseInt(result), nome, habilidade, energia, heroi_id, nome);
         	 }else{
             	 $('#criatura-'+id).attr('nome',nome);
         		 $('#criatura-'+id).attr('energia',energia);
@@ -270,7 +321,7 @@ function fncAlterarEnergiaCriatura(id, campo, propriedade){
     	energia = energia+1;
     }  
     
-    if(energia < 0){
+    if(energia <= 0){
     	energia = 0;
     }
     $.ajax({
@@ -278,9 +329,13 @@ function fncAlterarEnergiaCriatura(id, campo, propriedade){
         type: 'POST',
         data: 'controlador=ControladorCriatura&funcao=alterarEnergiaCriatura&energia=' + energia + '&id='+id,
         success: function(result) {
-        	$('#criatura-'+id).attr('energia',energia);
-   		    $('#criatura-td-energia-'+id).html(energia);
-        	$('#'+campo).html(energia);
+        	if(energia == 0){
+	        	fcnDeletarModalCriatura(id);	        	
+        	}else{        	
+	        	$('#criatura-'+id).attr('energia',energia);
+	   		    $('#criatura-td-energia-'+id).html(energia);
+	        	$('#'+campo).html(energia);
+        	}
         },
         beforeSend: function() {},
         complete: function() {},
@@ -290,3 +345,48 @@ function fncAlterarEnergiaCriatura(id, campo, propriedade){
     });
 }
 
+function addCriatura(id, nome, habilidade, energia, heroi_id, nome){
+	 $html = '';
+     $html +='<li class="list-group-item bg-dark text-white border border-light" id="list-criatura-'+id+'">';
+	 $html +='	<table>';
+	 $html +='		<tr>';
+	 $html +='			<td style="min-width: 270px; text-align: center;" colspan="2">';
+	 $html +='				<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">';
+	 $html +='					<div class="btn-group" role="group" aria-label="First group">';
+	 $html +='						<h5 style="margin-top: 5px;" id="criatura-td-nome-'+id+'" >'+nome+'</h5>';
+	 $html +='					</div>';
+	 $html +='					<div class="input-group">';
+	 $html +='						<button type="button" onclick="fcnCarregarModalCriatura(this);" ';
+	 $html +='								nome="'+nome+'"';
+	 $html +='								habilidade="'+habilidade+'"';
+	 $html +='								energia="'+energia+'"';
+	 $html +='								criatura-id="'+id+'"';
+	 $html +='								heroi_id="'+heroi_id+'"';
+	 $html +='								id="criatura-'+id+'"';
+	 $html +='								class="btn btn-danger" >Editar</button>';
+	 $html +='					</div>';
+	 $html +='				</div>';
+	 $html +='			</td>';
+	 $html +='		</tr>';
+	 $html +='		<tr>';
+	 $html +='			<td style="min-width: 135px;">Habilidade:</td>';
+	 $html +='			<td style="min-width: 135px; text-align: right;"><b id="criatura-td-habilidade-'+id+'">'+habilidade+'</b></td>';
+	 $html +='		</tr>';
+	 $html +='		<tr>';
+	 $html +='			<td>Energia:</td>';
+	 $html +='			<td style="text-align: right;"><b id="criatura-td-energia-'+id+'">'+energia+'</b></td>';
+	 $html +='		</tr>';
+	 $html +='		<tr>';
+	 $html +='			<td style="min-width: 270px; text-align: center;" colspan="2">';
+	 $html +='				<div class="btn-group" role="group" aria-label="Basic example">';
+	 $html +='					<button type="button" onclick="fncAlterarEnergiaCriatura('+id+',\'criatura-td-energia-'+id+'\',0)" class="btn btn-secondary">Menos (-)</button>';
+	 $html +='					<button type="button" onclick="fncAlterarEnergiaCriatura('+id+',\'criatura-td-energia-'+id+'\',1)" class="btn btn-secondary">Mais (+)</button>';
+	 $html +='				</div>';
+	 $html +='			</td>';
+	 $html +='		</tr>';
+	 $html +='	</table>';
+	 $html +='</li>';        		 
+	 
+	 $('#list-group-criatura').prepend($html);
+	
+}
