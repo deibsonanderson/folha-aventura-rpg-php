@@ -62,35 +62,35 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 					<div class="tab-content" id="v-pills-tabContent">
 						<div class="tab-pane fade show active" id="v-pills-ouro"
 							role="tabpanel" aria-labelledby="v-pills-ouro-tab">
-							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(1,<?php echo $heroi->heroi_id; ?>)">+</a>
+							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(1,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Ouro & Tesouros</i>
 							<ul id="list-group-ouro" class="list-group">
 								<?php echo carregarIventario($inventarios, 1,$heroi->heroi_id); ?>
 							</ul>
 						</div>
 						<div class="tab-pane fade" id="v-pills-provisao" role="tabpanel"
 							aria-labelledby="v-pills-provisao-tab">
-							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(2,<?php echo $heroi->heroi_id; ?>)">+</a>
+							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(2,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Provisões</i>
 							<ul id="list-group-provicao" class="list-group">
 								<?php echo carregarIventario($inventarios, 2,$heroi->heroi_id); ?>
 							</ul>
 						</div>
 						<div class="tab-pane fade" id="v-pills-equipamento" role="tabpanel"
 							aria-labelledby="v-pills-equipamento-tab">
-							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(3,<?php echo $heroi->heroi_id; ?>)">+</a>
+							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(3,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Equipamentos & Afins</i>
 							<ul id="list-group-equipamento" class="list-group">
 								<?php echo carregarIventario($inventarios, 3,$heroi->heroi_id); ?>
 							</ul>
 						</div>
 						<div class="tab-pane fade" id="v-pills-bonus-penalidade" role="tabpanel"
 							aria-labelledby="v-pills-bonus-penalidade-tab">
-							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(4,<?php echo $heroi->heroi_id; ?>)">+</a>
+							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(4,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Bonus & Maudições</i>
 							<ul id="list-group-bonus" class="list-group">
 								<?php echo carregarIventario($inventarios, 4,$heroi->heroi_id); ?>
 							</ul>
 						</div>
 						<div class="tab-pane fade" id="v-pills-pista" role="tabpanel"
 							aria-labelledby="v-pills-pista-tab">
-							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(5,<?php echo $heroi->heroi_id; ?>)">+</a>
+							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(5,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Pistas & Anotações</i>
 							<ul id="list-group-pista" class="list-group">
 								<?php echo carregarIventario($inventarios, 5,$heroi->heroi_id); ?>
 							</ul>

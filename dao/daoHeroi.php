@@ -62,6 +62,19 @@ class DaoHeroi extends Dados
             return $e;
         }
     }
+    
+    public function excluirRota($id)
+    {
+        try {
+            $conexao = $this->conectarBanco();
+            $sql = "UPDATE tb_aventura_heroi SET status = '0' WHERE id = " . $id;
+            $retorno = mysqli_query($conexao, $sql) or die('Erro na execução do delet rota!');
+            $this->FecharBanco($conexao);
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
 }
 
 ?>		

@@ -3,7 +3,7 @@
 	<div class="card bg-dark text-white">
 		<div class="card-body">
 			<h5 class="card-title">
-				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">Resetar Luta</a>
+				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">Iniciar a batalha</a>
 				<input type="hidden" class="form-control" id="status-batalha" value="0" >
 			</h5>
 			<div class="row">
@@ -34,7 +34,7 @@
 									<td style="text-align: right;"><b id="heroi-luta-sorte"><?php echo $heroi->sorte; ?></b></td>
 								</tr>
 								<tr>
-									<td>Resultado rodada: </td>
+									<td>Rolagem do dado:</td>
 									<td style="text-align: right;"><b id="heroi-luta-resultado"></b></td>
 								</tr>								
 							</table>
@@ -61,14 +61,14 @@
 									<td style="text-align: right;"><b id="criatura-luta-energia"></b></td>
 								</tr>
 								<tr>
-									<td>Resultado rodada: </td>
+									<td>Rolagem do dado:</td>
 									<td style="text-align: right;"><b id="criatura-luta-resultado"></b></td>
 								</tr>
 								<tr>
 									<td style="min-width: 270px; text-align: center;" colspan="2">
 										<div class="btn-group" role="group" aria-label="">
-											<button type="button" style="margin-top: 10px;" onclick="fcnTestarSorte(<?php echo $heroi->heroi_id; ?>)" class="btn btn-secondary">Tentar Sorte</button>
-											<button type="button" style="margin-top: 10px;" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Batalhar</button>
+											<button type="button" id="btn-test-sort" style="margin-top: 10px;" disabled="disabled" onclick="fcnTestarSorte(<?php echo $heroi->heroi_id; ?>)" class="btn btn-secondary">Tentar Sorte</button>
+											<button type="button" id="btn-batalha-criatura" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Batalhar</button>
 										</div>
 									</td>
 								</tr>								

@@ -1,5 +1,6 @@
 <?php 
-function carregarHeroi($conexao){
+function carregarHeroi($conexao,$heroiId ){
+   
     $sql = "SELECT h.`id` as heroi_id,
                h.`nome`,
                h.`raca`,
@@ -11,7 +12,7 @@ function carregarHeroi($conexao){
                h.`sorte`,
                h.`sorte_inicial`
         FROM `tb_aventura_heroi` h
-        WHERE h.`id` = 1 AND h.`status` = 1";
+        WHERE h.`id` = ".$heroiId." AND h.`status` = 1";
     
     $query = mysqli_query($conexao,$sql) or die('erro nos carregar heroi e status');
     $heroi = null;
@@ -47,15 +48,19 @@ function carregarCampoStatus($id, $funcao, $controlador, $campo, $valor){
 }
 
 //inicio
-$heroi = carregarHeroi($conexao);
+if(isset($_POST["heroi_id"])){
+    $heroiId = $_POST["heroi_id"];    
+}
+$heroi = carregarHeroi($conexao, $heroiId);
 ?>
-<div class="tab-pane fade show active" id="status" role="tabpanel"
-	aria-labelledby="status-tab">
+<div class="tab-pane fade show active" id="status" role="tabpanel" aria-labelledby="status-tab">
 	<div class="card bg-dark text-white">
 		<div class="card-body">
 			<div class="form-row">
 				<div class="col-md-12">
-					<label for="button-addon4" class="col-md-12">Habilidade:</label>
+					<label for="button-addon4" class="col-md-12">Habilidade: (inicial: 
+						<span id="status-habilidade-inicial"><?php echo $heroi->habilidade_inicial; ?></span>)
+					</label>
 					<div class="input-group col-md-12">
 						<?php echo carregarCampoStatus($heroi->heroi_id, 'alterarHeroiHabilidade', 
 						    'ControladorHeroi', 'status-habilidade', $heroi->habilidade); ?>
@@ -65,7 +70,9 @@ $heroi = carregarHeroi($conexao);
 			<br />
 			<div class="form-row">
 				<div class="col-md-12">
-					<label for="button-addon4" class="col-md-12">Energia:</label>
+					<label for="button-addon4" class="col-md-12">Energia: (inicial: 
+						<span id="status-energia-inicial"><?php echo $heroi->energia_inicial; ?></span>)
+					</label>
 					<div class="input-group col-md-12">
 						<?php echo carregarCampoStatus($heroi->heroi_id, 'alterarHeroiEnergia', 
 						    'ControladorHeroi', 'status-energia', $heroi->energia); ?>
@@ -75,7 +82,9 @@ $heroi = carregarHeroi($conexao);
 			<br />
 			<div class="form-row">
 				<div class="col-md-12">
-					<label for="button-addon4" class="col-md-12">Sorte:</label>
+					<label for="button-addon4" class="col-md-12">Sorte: (inicial: 
+						<span id="status-sorte-inicial"><?php echo $heroi->sorte_inicial; ?></span>)
+					</label>
 					<div class="input-group col-md-12">
 						<?php echo carregarCampoStatus($heroi->heroi_id, 'alterarHeroiSorte', 
 						    'ControladorHeroi', 'status-sorte', $heroi->sorte); ?>

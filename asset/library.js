@@ -1,3 +1,9 @@
+function irPagina(id){
+	$('#heroi_id').val(id);
+	$('#form-heroi').submit(); 
+}
+
+// DADOS
 function vibracao(time){
 	navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
     if (!navigator.vibrate) {
@@ -12,6 +18,14 @@ function vibracao(time){
 //    $('#stop').click(function () {
 //        navigator.vibrate(0);
 //    });
+}
+
+function validarLimite(valor, limite){
+	if(valor > limite){
+		return false;
+	}else{
+		return true;
+	}
 }
 
 function rolarDado(){
@@ -41,30 +55,25 @@ function rolarDado(){
 }
 
 //HEROI INICIO
-function fncAlterarHeroi(element, campo, propriedade){
-    controlador = $(element).attr('controlador');
-    funcao = $(element).attr('funcao');
-    retorno = $(element).attr('retorno');
-    heroi_id = $(element).attr('heroi_id');    
-    valor = parseInt($('#'+campo).val());
-    
-    if(propriedade == 0){
-    	valor = valor-1;
-    }else if(propriedade == 1){
-    	valor = valor+1;
-    }  
-    
-    if(valor < 0){
-    	valor = 0;
-    }
+
+function fcnCarregarModalHeroi(id) {
+	$('#modal-heroi-id').val(id);
+	$('#modal-manter-heroi').modal('show');
+}
+
+function fcnDeletarModalHeroi(){
+	heroiId = $('#modal-heroi-id').val();	 	
+	$('#modal-manter-rota').modal('hide');
+	
     $.ajax({
         url: 'controlador.php',
         type: 'POST',
-        data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&valor=' + valor + '&heroi_id='+heroi_id,
+        data: 'controlador=ControladorHeroi&funcao=excluirHeroi&id='+heroiId,
         success: function(result) {
-        	$('#'+campo).val(valor);
-        	//$('#' + retorno).html(result);
-        },
+       	 $('#list-heroi-'+heroiId).fadeOut( "slow", function() {
+    		 $('#list-heroi-'+heroiId).remove();
+    	 });
+    	},
         beforeSend: function() {},
         complete: function() {},
         error: function (request, status, error) {
@@ -73,13 +82,66 @@ function fncAlterarHeroi(element, campo, propriedade){
     });
 }
 
+
+
+
+
+function fncAlterarHeroi(element, campo, propriedade){
+    controlador = $(element).attr('controlador');
+    funcao = $(element).attr('funcao');
+    retorno = $(element).attr('retorno');
+    heroi_id = $(element).attr('heroi_id');    
+    valor = parseInt($('#'+campo).val());
+
+    if(propriedade == 0){
+    	valor = valor-1;
+    }else if(propriedade == 1){
+    	valor = valor+1;
+    }  
+    
+    if(validarLimite(valor,parseInt($('#'+campo+'-inicial').html())) ){
+    	
+	    if(valor < 0){
+	    	valor = 0;
+	    }
+	    $.ajax({
+	        url: 'controlador.php',
+	        type: 'POST',
+	        data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&valor=' + valor + '&heroi_id='+heroi_id,
+	        success: function(result) {
+	        	$('#'+campo).val(valor);
+	        	//$('#' + retorno).html(result);
+	        },
+	        beforeSend: function() {},
+	        complete: function() {},
+	        error: function (request, status, error) {
+	        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
+	        }
+	    });
+    }else{
+    	alert('Não pode exceder o limite inicial!');
+    }    
+}
+
 function fncIncluirRotaHeroi(element, campo){
     controlador = $(element).attr('controlador');
     funcao = $(element).attr('funcao');
     retorno = $(element).attr('retorno');
     heroi_id = $(element).attr('heroi_id');    
-    rota = parseInt($('#'+campo).val());
- 	$.ajax({
+    rota = $('#'+campo).val();
+    if(rota == null || rota == undefined || rota == ''){
+    	alert('O campo da roda deve ser preenchido!');
+		return;
+    }
+    
+    rota = parseInt(rota);
+    
+    if(rota <= 0){
+    	alert('A rota deve ser superior a "0"!');
+		return;
+    }
+    
+    $.ajax({
         url: 'controlador.php',
         type: 'POST',
         data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&rota=' + rota + '&heroi_id='+heroi_id,
@@ -155,7 +217,7 @@ function fcnCarregarModalIncluirInvent(tipo,heroi_id){
 	$('#modal-manter-invent').modal('show');
 }
 
-function fncAlterarNumber(campo, propriedade){
+function fncAlterarNumber(campo, propriedade, max){
 	valor = parseInt($('#'+campo).val());
     if(propriedade == 0){
     	valor = valor-1;
@@ -166,6 +228,11 @@ function fncAlterarNumber(campo, propriedade){
     if(valor < 0){
     	valor = 0;
     }
+    
+    if(max != undefined && max != null && max != '' && valor > max ){
+    	valor = max;
+    }
+    
    	$('#'+campo).val(valor);
 }
 
@@ -175,14 +242,24 @@ function fcnAtualizarModalInvent() {
 	quantidade = $('#modal-invent-quantidade').val();
 	tipo = $('#modal-invent-tipo').val();
 	heroi_id = $('#modal-invent-heroi_id').val();
-	$('#modal-manter-invent').modal('hide');
 	
+	if(descricao == '' || descricao == null || descricao == undefined){
+		alert('O campo descrição deve ser preenchido!');
+		return;
+	}
+	
+	if(quantidade == '' || quantidade == null || quantidade == undefined || parseInt(quantidade) <= 0){
+		alert('A quantidade deve ser maior que 0!');
+		return;
+	}
+	
+	
+	$('#modal-manter-invent').modal('hide');
 	if(id == null || id == undefined || id == ""){
 		funcao = 'incluirInventario';
 	}else{
 		funcao = 'alterarInventario';
 	}
-	
     $.ajax({
         url: 'controlador.php',
         type: 'POST',
@@ -203,6 +280,7 @@ function fcnAtualizarModalInvent() {
         	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
         }
     });
+	
 }
 
 function addInventario(id, descricao, quantidade, heroi_id, tipo){
@@ -263,8 +341,15 @@ function fcnDeletarModalInvent(id) {
 //INVENTARIO FIM
 
 //CRIATURA INICIO
+function fcnAtualizarHeroiStatus(){
+	$('#heroi-luta-energia').html($('#status-energia').val());
+	$('#heroi-luta-habilidade').html($('#status-habilidade').val());
+	$('#heroi-luta-sorte').html($('#status-sorte').val());
+}
+
+
 function fcnCarregarModalIncluirCriatura(heroi_id){
-	$('#modal-criatura-nome').val('');
+	$('#modal-criatura-nome').val('Monstro');
 	$('#modal-criatura-habilidade').val(0);
 	$('#modal-criatura-energia').val(0);
 	$('#modal-criatura-heroi_id').val(heroi_id);
@@ -275,35 +360,58 @@ function fcnIniciarBatalhaModalCriatura(){
 	nome = $('#modal-criatura-nome').val();
 	habilidade = $('#modal-criatura-habilidade').val();
 	energia = $('#modal-criatura-energia').val();
+	
+	if(nome == '' || nome == null || nome == undefined){
+		alert('O campo nome deve ser preenchido!');
+		return;
+	}
+	
+	if(habilidade == '' || habilidade == null || habilidade == undefined || parseInt(habilidade) <= 0){
+		alert('A habilidade deve ser superior a 0!');
+		return;
+	}
+	
+	if(energia == '' || energia == null || energia == undefined || parseInt(energia) <= 0){
+		alert('A energia deve ser superior a 0!');
+		return;
+	}	
+	
 	heroi_id = $('#modal-criatura-heroi_id').val();
 	$('#modal-manter-criatura').modal('hide');
-	$('#criatura-luta-resultado').html('');
-	$('#heroi-luta-resultado').html('');
+	$('#criatura-luta-resultado').html('-');
+	$('#heroi-luta-resultado').html('-');
 	$('#status-batalha').val(0);
 	$('#criatura-luta-nome').html(nome);
 	$('#criatura-luta-energia').html(energia);
 	$('#criatura-luta-habilidade').html(habilidade);
-	decorarSorte(3);
+	
+	$("#btn-batalha-criatura").prop( "disabled", false );
+	$("#btn-test-sort").prop( "disabled", true );
+	
+	limparCor();
 }
 
 function fcnBatalhar(heroiId){
+	limparCor();
+	
 	energiaHeroi = parseInt($('#heroi-luta-energia').html());
 	energiaCriatura = parseInt($('#criatura-luta-energia').html());
 	
 	habilidadeHeroi = parseInt($('#heroi-luta-habilidade').html());
 	habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());
 	
-	valorCriatura = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura;
-	valorHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi;
+	sorteCriatura = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura;
+	sorteHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi;
 
-	$('#criatura-luta-resultado').html(valorCriatura);
-	$('#heroi-luta-resultado').html(valorHeroi);
+	$('#criatura-luta-resultado').html(sorteCriatura);
+	$('#heroi-luta-resultado').html(sorteHeroi);
+
+	$("#btn-batalha-criatura").prop( "disabled", false );
+	$("#btn-test-sort").prop( "disabled", false );
 	
-	if(valorCriatura > valorHeroi){
+	if(sorteCriatura > sorteHeroi){ //Criatura Ataca
 		energiaHeroi = energiaHeroi-2;
-		
-		decorarSorte(2);
-		
+		$('#heroi-luta-energia').addClass('text-danger');
 		$('#status-energia').val(energiaHeroi);
 		$('#heroi-luta-energia').html(energiaHeroi);
 		$('#status-batalha').val(2);
@@ -317,68 +425,73 @@ function fcnBatalhar(heroiId){
 	        error: function (request, status, error) {}
 	    });
 
+		if(energiaHeroi <= 0 ){
+			energiaHeroi = 0;
+			$("#btn-batalha-criatura").prop( "disabled", true );
+			$("#btn-test-sort").prop( "disabled", true );
+			alert('Fim da batalha o herói morreu!');
+			$('#status-batalha').val(0);
+		}
 		
-	}else if(valorCriatura < valorHeroi){
+	}else if(sorteCriatura < sorteHeroi){ //Heroi Ataca
 		energiaCriatura = energiaCriatura-2;
-		
-		decorarSorte(1);
+		$('#criatura-luta-energia').addClass('text-danger');		
 		$('#criatura-luta-energia').html(energiaCriatura);
 		$('#status-batalha').val(1);
-	}else if(valorCriatura == valorHeroi){
-		decorarSorte(3);
+		
+		if(sorteCriatura <= 0 ){
+			sorteCriatura = 0;
+			$("#btn-batalha-criatura").prop( "disabled", true );
+			$("#btn-test-sort").prop( "disabled", true );
+			alert('Fim da batalha o herói venceu!');
+			$('#status-batalha').val(0);
+		}		
+		
+	}else if(sorteCriatura == sorteHeroi){ //empate
+		limparCor();
+		$("#btn-test-sort").prop( "disabled", true );
+		alert('Empate!');
 	}
+	
 	
 }
 
-function decorarSorte(key){
+function limparCor(){
 	$('#heroi-luta-energia').removeClass('text-success');
 	$('#criatura-luta-energia').removeClass('text-success');
 	$('#criatura-luta-energia').removeClass('text-danger');
     $('#heroi-luta-energia').removeClass('text-danger');
-
-	switch (key) {
-		case 1:
-			$('#criatura-luta-energia').addClass('text-danger');
-			$('#heroi-luta-energia').addClass('text-success');
-			break;
-		case 2:
-			$('#heroi-luta-energia').addClass('text-danger');
-			$('#criatura-luta-energia').addClass('text-success');
-			break;			
-		default:
-		break;
-	}
-
 }
 
 function fcnTestarSorte(heroiId){
+	limparCor();
 	energiaHeroi = parseInt($('#heroi-luta-energia').html());
 	energiaCriatura = parseInt($('#criatura-luta-energia').html());
 	sorteHeroi = parseInt($('#heroi-luta-sorte').html());
 	statusBatalha = $('#status-batalha').val();
-	valorHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1);
+	sorte = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1);
 
-	$('#criatura-luta-resultado').html('');
-	$('#heroi-luta-resultado').html(valorHeroi);
+	$('#criatura-luta-resultado').html('-');
+	$('#heroi-luta-resultado').html(sorte);
 	
-	if(statusBatalha == 1){ //Bateu
-		if(valorHeroi <= sorteHeroi){ //BOM
-			decorarSorte(1);
+	if(statusBatalha == 1){ //Heroi Atacou
+		if(sorte <= sorteHeroi){ //BOM
+			$('#criatura-luta-energia').addClass('text-danger');
 			energiaCriatura = energiaCriatura-1;		
 			$('#criatura-luta-energia').html(energiaCriatura);
 		}else{ //RUIM
-			decorarSorte(2);
+			$('#criatura-luta-energia').addClass('text-success');
 			energiaCriatura = energiaCriatura+1;		
 			$('#criatura-luta-energia').html(energiaCriatura);
 		}
-	}else if(statusBatalha == 2){ //Apanhou
-		if(valorHeroi <= sorteHeroi){ //BOM
+	}else if(statusBatalha == 2){ //Monstro Atacou
+		if(sorte <= sorteHeroi){ //BOM
 			energiaHeroi = energiaHeroi+1;
-			decorarSorte(1);
+			$('#heroi-luta-energia').addClass('text-success');
 			$('#status-energia').val(energiaHeroi);
 			$('#heroi-luta-energia').html(energiaHeroi);
 		}else{ //RUIM
-			decorarSorte(2);
+			$('#heroi-luta-energia').addClass('text-danger');
 			energiaHeroi = energiaHeroi-1;
 			$('#status-energia').val(energiaHeroi);
 			$('#heroi-luta-energia').html(energiaHeroi);
@@ -389,7 +502,7 @@ function fcnTestarSorte(heroiId){
 	$('#heroi-luta-sorte').html(sorteHeroi);
 	$('#status-sorte').val(sorteHeroi);
 	$('#status-batalha').val(0);
-	
+	$("#btn-test-sort").prop( "disabled", true );
 	$.ajax({
         url: 'controlador.php',
         type: 'POST',

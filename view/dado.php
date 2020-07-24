@@ -8,13 +8,13 @@
 					<label for="button-addon4" class="">Dados:</label>
 					<div class="input-group ">
 						<div class="input-group-prepend">
-							<button class="btn btn-secondary" onclick="fncAlterarNumber('input-dados',0)" type="button">Menos (-)</button>
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('input-dados',0,6)" type="button">Menos (-)</button>
 						</div>
 						<input type="number" readonly="true" class="form-control text-center"
 							placeholder="" aria-label="Example text with two button addons"
 							aria-describedby="button-addon3" id="input-dados" value="2">
 						<div class="input-group-append">
-							<button class="btn btn-secondary" onclick="fncAlterarNumber('input-dados',1)" type="button">Mais (+)</button>
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('input-dados',1,6)" type="button">Mais (+)</button>
 						</div>
 					</div>
 				</div>

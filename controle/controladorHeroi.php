@@ -55,6 +55,19 @@ class ControladorHeroi
         $modulo->alterarHeroiSorte($heroi);
         $modulo->__destruct();
     }
+    
+    public function excluirHeroi($post)
+    {
+        try {
+            $id = $post['id'];
+            $modulo = new DaoHeroi();
+            $modulo->excluirRota($id);
+            $modulo->__destruct();
+            return $this->telaListaRota($post);
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
 }
 ?>
 			
