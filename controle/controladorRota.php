@@ -53,6 +53,7 @@ class ControladorRota
         $html = '';
         try {
             $rotas = $this->listarRota($post['heroi_id']);
+            $html .= '<input type="hidden" id="quantidade-rotas" value="'.count($rotas).'">';
             if ($rotas != null && count($rotas) > 0 ) {
                 foreach ($rotas as $key => $rota) {
                     if($key % 2 == 0){

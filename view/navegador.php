@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<img alt="" src="image/logo.png"><a class="navbar-brand" href="#">Folha de Aventura</a>
+	<a href="index.php"><img alt="" src="image/logo.png"></a><a class="navbar-brand" href="#">Folha de Aventura</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 		data-target="#navbarNav" aria-controls="navbarNav"
 		aria-expanded="false" aria-label="Toggle navigation">
@@ -10,10 +10,10 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="index.php">Heroi</span></a>
 			</li>
-			<!-- li class="nav-item active">
-				<a class="nav-link" href="#">Features</a>
+			<li class="nav-item active">
+				<a class="nav-link" href="sobre.php">Sobre</a>
 			</li>
-			<li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+			<!-- li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
 			<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a></li-->
 		</ul>
 	</div>

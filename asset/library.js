@@ -212,15 +212,22 @@ function fncIncluirRotaHeroi(element, campo){
 //HEROI FIM
 //ROTA INICIO
 function fcnAddTimeLineRota(rota, id, heroi_id){
+	quantidade = parseInt($('#quantidade-rotas').val());
 	position = $('#position-rota').val();
 	if(position == 0){
 		$('#position-rota').val(1);
-		html = '<div class="row align-items-center justify-content-end how-it-works d-flex"><div class="col-2 text-center full d-inline-flex justify-content-center align-items-center"><div onclick="fcnCarregarModalRota('+id+','+heroi_id+');" class="circle font-weight-bold">'+rota+'</div></div></div><div class="row timeline"><div class="col-2"><div class="corner right-bottom"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner top-left"></div></div></div>';
+		html = '<div class="row align-items-center justify-content-end how-it-works d-flex"><div class="col-2 text-center full d-inline-flex justify-content-center align-items-center"><div onclick="fcnCarregarModalRota('+id+','+heroi_id+');" class="circle font-weight-bold">'+rota+'</div></div></div>';
+		if(quantidade > 0){
+			html += '<div class="row timeline"><div class="col-2"><div class="corner right-bottom"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner top-left"></div></div></div>';
+		}
 	}else{
 		$('#position-rota').val(0);
-		html = '<div class="row align-items-center how-it-works d-flex"><div class="col-2 text-center bottom d-inline-flex justify-content-center align-items-center"><div onclick="fcnCarregarModalRota('+id+','+heroi_id+');"  class="circle font-weight-bold">'+rota+'</div></div></div><div class="row timeline"><div class="col-2"><div class="corner top-right"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner left-bottom"></div></div></div>';
-
+		html = '<div class="row align-items-center how-it-works d-flex"><div class="col-2 text-center bottom d-inline-flex justify-content-center align-items-center"><div onclick="fcnCarregarModalRota('+id+','+heroi_id+');"  class="circle font-weight-bold">'+rota+'</div></div></div>';
+		if(quantidade > 0){
+			html += '<div class="row timeline"><div class="col-2"><div class="corner top-right"></div></div><div class="col-8"><hr /></div><div class="col-2"><div class="corner left-bottom"></div></div></div>';
+		}
 	}
+	$('#quantidade-rotas').val((quantidade+1));
 	$('#div-rota-card-body').prepend(html);
 }
 
@@ -253,6 +260,14 @@ function fcnDeletarModalRota(){
 
 //ROTA FIM
 //INVENTARIO INICIO
+
+function fcnCarregarModalInventExluir(id) {
+	$('#modal-inventario-id').val($('#modal-invent-id').val());
+	$('#modal-manter-invent').modal('hide');
+	$('#modal-excluir-inventario').modal('show');	
+}
+
+
 function fcnCarregarModalInvent(element) {
 	$('#modal-invent-id').val($(element).attr('inventario-id'));
 	$('#modal-invent-descricao').val($(element).attr('descricao'));
@@ -370,25 +385,27 @@ function addInventario(id, descricao, quantidade, heroi_id, tipo){
 
 function fcnDeletarModalInvent(id) {
 	if(id == null || id == undefined || id == ''){
-		id = $('#modal-invent-id').val();	
+		id = $('#modal-inventario-id').val();
+		
+	    $.ajax({
+	        url: 'controlador.php',
+	        type: 'POST',
+	        data: 'controlador=ControladorInventario&funcao=excluirInventario&id='+id,
+	        success: function(result) {        	 
+	        	 $('#inventario-'+id).fadeOut( "slow", function() {
+	        		 $('#inventario-'+id).remove();
+	        	 });
+	    	},
+	        beforeSend: function() {},
+	        complete: function() {},
+	        error: function (request, status, error) {
+	        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
+	        }
+	    });
+
 	}
-	$('#modal-manter-invent').modal('hide');
+	$('#modal-excluir-inventario').modal('hide');
 	
-    $.ajax({
-        url: 'controlador.php',
-        type: 'POST',
-        data: 'controlador=ControladorInventario&funcao=excluirInventario&id='+id,
-        success: function(result) {        	 
-        	 $('#inventario-'+id).fadeOut( "slow", function() {
-        		 $('#inventario-'+id).remove();
-        	 });
-    	},
-        beforeSend: function() {},
-        complete: function() {},
-        error: function (request, status, error) {
-        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
-        }
-    });
 }
 //INVENTARIO FIM
 

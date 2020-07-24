@@ -41,6 +41,7 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
     <div class="card bg-dark text-white">
     	<input id="position-rota" type="hidden" value="1">
     	<div id="div-rota-card-body" class="card-body" style="padding-left: 50px; padding-right: 50px; overflow: auto; height: 300px;">
+    		<input type="hidden" id="quantidade-rotas" value="<?php echo count($rotas);?>">
     		<?php 
     		if ($rotas != null && count($rotas) > 0 ) {
     		    foreach ($rotas as $key => $rota) {

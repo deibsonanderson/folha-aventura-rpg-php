@@ -33,7 +33,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" onclick="fcnAtualizarModalInvent();" class="btn btn-primary">Save</button>
-				<button type="button" onclick="fcnDeletarModalInvent();" class="btn btn-danger">Excluir</button>
+				<button type="button" onclick="fcnCarregarModalInventExluir();" class="btn btn-danger">Excluir</button>
 			</div>
 		</div>
 	</div>

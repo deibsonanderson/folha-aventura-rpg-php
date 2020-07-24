@@ -29,8 +29,6 @@ function carregarHeroi($conexao){
 
 $herois = carregarHeroi($conexao);
 ?>
-
-
 <!doctype html>
 <html lang="en">
 <?php include('view/head.php'); ?>
@@ -43,11 +41,20 @@ $herois = carregarHeroi($conexao);
     			<input type="hidden" id="heroi_id" name="heroi_id">
     		</form>
     		<div class="card-body">
+    			<div class="btn-toolbar justify-content-between"
+						role="toolbar" aria-label="Toolbar with button groups">
+						<div class="btn-group" role="group" aria-label="First group">
+							<h5 style="margin-top: 5px;"><a class="">Heróis</a></h5>												
+						</div>
+						<div class="input-group">
+							<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalCriarHeroi()"><b>+</b></a>							
+						</div>											
+					</div>
+    			
     			<h5 class="card-title text-align: center;">
-    				Heróis
     			</h5>
     			<h5 class="card-title">				
-    				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalCriarHeroi()">Novo Heroi (+)</a>				
+    								
     			</h5>
     			<div class="row">
     				<div class="col-md-12">
@@ -63,11 +70,11 @@ $herois = carregarHeroi($conexao);
     										<div class="btn-toolbar justify-content-between"
     											role="toolbar" aria-label="Toolbar with button groups">
     											<div class="btn-group" role="group" aria-label="First group">
-    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome"><a class=""><?php echo $heroi->nome; ?></a></h5>												
+    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome"><a class="text-danger"><b><?php echo $heroi->nome; ?></b></a></h5>												
     											</div>
     											<div class="input-group">
     												<button onclick="fcnCarregarModalHeroi(<?php echo $heroi->heroi_id; ?>);"						                				
-    														type="button" class="btn btn-danger" >Excluir</button>
+    														type="button" class="btn btn-danger"><b>x</b></button>
     											</div>											
     										</div>
     									</td>
