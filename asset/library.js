@@ -199,7 +199,8 @@ function fncIncluirRotaHeroi(element, campo){
         data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&rota=' + rota + '&heroi_id='+heroi_id,
         success: function(result) {
         	fcnAddTimeLineRota(rota, parseInt(result), heroi_id);
-        	$('#'+campo).val('');        	
+        	$('#'+campo).val('');
+			$('#'+campo).focus();        	
         },
         beforeSend: function() {},
         complete: function() {},
