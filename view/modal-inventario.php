@@ -2,7 +2,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content bg-dark text-white">
 			<div class="modal-header">
-				<h5 class="modal-title">Modal Inventario</h5>
+				<h5 class="modal-title">Incluir um item</h5>
 				<button type="button" class="close text-white" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>

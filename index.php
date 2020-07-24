@@ -8,7 +8,7 @@ $conexao = $dados->conectarBanco();
 function carregarHeroi($conexao){
     $sql = "SELECT h.`id` as heroi_id,
                h.`nome`,
-               h.`raca`,
+               h.`aventura`,
                h.`status`,
                h.`habilidade`,
                h.`habilidade_inicial`,
@@ -47,7 +47,7 @@ $herois = carregarHeroi($conexao);
     				Heróis
     			</h5>
     			<h5 class="card-title">				
-    				<a href="#" class="btn btn-secondary" onclick="alert('manutanção!!!!')">Novo Heroi (+)</a>				
+    				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalCriarHeroi()">Novo Heroi (+)</a>				
     			</h5>
     			<div class="row">
     				<div class="col-md-12">
@@ -63,7 +63,7 @@ $herois = carregarHeroi($conexao);
     										<div class="btn-toolbar justify-content-between"
     											role="toolbar" aria-label="Toolbar with button groups">
     											<div class="btn-group" role="group" aria-label="First group">
-    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome">Hanzar</h5>												
+    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome"><a class=""><?php echo $heroi->nome; ?></a></h5>												
     											</div>
     											<div class="input-group">
     												<button onclick="fcnCarregarModalHeroi(<?php echo $heroi->heroi_id; ?>);"						                				
@@ -73,16 +73,19 @@ $herois = carregarHeroi($conexao);
     									</td>
     								</tr>
     								<tr>
-    									<td style="min-width: 135px;">Habilidade:</td>
+    									<td style="min-width: 135px;">Habilidade: (<?php echo $heroi->habilidade_inicial; ?>)</td>
     									<td style="min-width: 135px; text-align: right;"><b id="criatura-luta-habilidade"><?php echo $heroi->habilidade; ?></b></td>
     								</tr>
     								<tr>
-    									<td>Energia:</td>
+    									<td>Energia: (<?php echo $heroi->energia_inicial; ?>)</td>
     									<td style="text-align: right;"><b id="criatura-luta-energia"><?php echo $heroi->energia; ?></b></td>
     								</tr>
     								<tr>
-    									<td>Rolagem do dado:</td>
+    									<td>Sorte: (<?php echo $heroi->sorte_inicial; ?>)</td>
     									<td style="text-align: right;"><b id="criatura-luta-resultado"><?php echo $heroi->sorte; ?></b></td>
+    								</tr>
+    								<tr>
+    									<td colspan="2"><?php echo $heroi->aventura; ?></td>    									
     								</tr>							
     							</table>
     						</li>
@@ -96,6 +99,7 @@ $herois = carregarHeroi($conexao);
     	</div>	
 	</div>
 	<?php include('view/modal-heroi.php'); ?>
+	<?php include('view/modal-heroi-criar.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

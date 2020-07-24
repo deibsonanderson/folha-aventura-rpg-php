@@ -10,6 +10,40 @@ class DaoHeroi extends Dados
     // destruidor
     public function __destruct()
     {}
+    
+    public function incluirHeroi($heroi) {
+        try {
+            $conexao = $this->conectarBanco();
+            
+            $sql = "INSERT INTO tb_aventura_heroi (  id,
+													  nome,
+                 									  aventura,
+                                                      habilidade,
+                                                      energia,
+                                                      sorte,
+                                                      habilidade_inicial,
+                                                      energia_inicial,
+                                                      sorte_inicial,
+                									  status
+													)VALUES(
+													NULL,
+													'" . $heroi->getNome() . "',													    
+													'" . $heroi->getAventura() . "',
+                                                    '" . $heroi->getHabilidade() . "',
+                                                    '" . $heroi->getEnergia() . "',
+                                                    '" . $heroi->getSorte() . "',
+                                                    '" . $heroi->getHabilidade() . "',
+                                                    '" . $heroi->getEnergia() . "',
+                                                    '" . $heroi->getSorte() . "',													    
+													'1')";
+
+            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução do insert heroi!');
+            $this->FecharBanco($conexao);
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }	
 
     public function alterarHeroiHabilidade($heroi)
     {

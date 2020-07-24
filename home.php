@@ -30,8 +30,19 @@ $conexao = $dados->conectarBanco();
 <?php include('view/required.php'); 
 $dados->FecharBanco($conexao);
 ?>
-<audio id="myAudio" style="display: none;">
+<audio id="dice-song" style="display: none;">
   <source src="./asset/dice.jpg" type="audio/mpeg">
+</audio>
+<audio id="sword-song" style="display: none;">
+  <source src="./asset/swosh-sword-swing.jpg" type="audio/mpeg">
+</audio>
+
+<audio id="wrong-song" style="display: none;">
+  <source src="./asset/wrong.jpg" type="audio/mpeg">
+</audio>
+
+<audio id="bell-song" style="display: none;">
+  <source src="./asset/bell.jpg" type="audio/mpeg">
 </audio>
 
 </html>

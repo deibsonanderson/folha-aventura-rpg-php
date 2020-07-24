@@ -3,7 +3,7 @@ function carregarHeroi($conexao,$heroiId ){
    
     $sql = "SELECT h.`id` as heroi_id,
                h.`nome`,
-               h.`raca`,
+               h.`aventura`,
                h.`status`,
                h.`habilidade`,
                h.`habilidade_inicial`,

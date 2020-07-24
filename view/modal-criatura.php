@@ -2,11 +2,11 @@
 	<div class="modal-dialog">
 		<div class="modal-content bg-dark text-white">
 			<div class="modal-header">
-				<h5 class="modal-title">Modal Criaturas</h5>
+				<h5 class="modal-title">Inserir uma Criaturas</h5>
 				<button type="button" class="close text-white" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
-				</button>
+				</button>				
 			</div>
 			<div class="modal-body">
 				<input type="hidden" class="form-control" id="modal-criatura-heroi_id" >

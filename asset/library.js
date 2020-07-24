@@ -30,7 +30,7 @@ function validarLimite(valor, limite){
 
 function rolarDado(){
 	$('#imagem-dado').attr('src','image/dado-animado.gif');
-	diceSound = document.getElementById("myAudio"); 
+	diceSound = document.getElementById("dice-song"); 
 	qtdDados = parseInt($('#input-dados').val());
 	if(qtdDados > 0){
 		diceSound.play();
@@ -55,6 +55,58 @@ function rolarDado(){
 }
 
 //HEROI INICIO
+function fcnCarregarModalCriarHeroi() {
+	$('#modal-heroi-criar-nome').val('');
+	$('#modal-heroi-criar-habilidade').val(0);
+	$('#modal-heroi-criar-energia').val(0);
+	$('#modal-heroi-criar-sorte').val(0);	
+	$('#modal-manter-heroi-criar').modal('show');
+}
+
+function fncIncluirHeroi(){
+    
+	nomeCriar = $('#modal-heroi-criar-nome').val();
+	aventuraCriar = $('#modal-heroi-criar-aventura').val();
+	habilidadeCriar = parseInt($('#modal-heroi-criar-habilidade').val());
+	energiaCriar = parseInt($('#modal-heroi-criar-energia').val());
+	sorteCriar = parseInt($('#modal-heroi-criar-sorte').val());	
+	
+	if(nomeCriar == null || nomeCriar == undefined || nomeCriar == ''){
+    	alert('O campo da nome deve ser preenchido!');
+		return;
+    }
+	
+	if(habilidadeCriar == null || habilidadeCriar == undefined || habilidadeCriar == '' || habilidadeCriar <= 0){
+    	alert('O campo habilidade deve ser superior a "0"!');
+		return;
+    }
+
+	if(energiaCriar == null || energiaCriar == undefined || energiaCriar == '' || energiaCriar <= 0){
+    	alert('O campo energia deve ser superior a "0"!');
+		return;
+    }
+	
+	if(sorteCriar == null || sorteCriar == undefined || sorteCriar == '' || sorteCriar <= 0){
+    	alert('O campo sorte deve ser superior a "0"!');
+		return;
+    }
+
+	$('#modal-manter-heroi-criar').modal('hide');
+	
+    $.ajax({
+        url: 'controlador.php',
+        type: 'POST',
+        data: 'controlador=ControladorHeroi&funcao=incluirHeroi&nome=' + nomeCriar + '&aventura='+aventuraCriar+ '&habilidade='+habilidadeCriar+ '&energia='+energiaCriar+ '&sorte='+sorteCriar,
+        success: function(result) {
+        	location.reload();        	
+        },
+        beforeSend: function() {},
+        complete: function() {},
+        error: function (request, status, error) {
+        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
+        }
+    });
+}
 
 function fcnCarregarModalHeroi(id) {
 	$('#modal-heroi-id').val(id);
@@ -63,7 +115,7 @@ function fcnCarregarModalHeroi(id) {
 
 function fcnDeletarModalHeroi(){
 	heroiId = $('#modal-heroi-id').val();	 	
-	$('#modal-manter-rota').modal('hide');
+	$('#modal-manter-heroi').modal('hide');
 	
     $.ajax({
         url: 'controlador.php',
@@ -393,6 +445,8 @@ function fcnIniciarBatalhaModalCriatura(){
 
 function fcnBatalhar(heroiId){
 	limparCor();
+	swordSound = document.getElementById("sword-song");
+	wrongSound = document.getElementById("wrong-song");
 	
 	energiaHeroi = parseInt($('#heroi-luta-energia').html());
 	energiaCriatura = parseInt($('#criatura-luta-energia').html());
@@ -415,6 +469,8 @@ function fcnBatalhar(heroiId){
 		$('#status-energia').val(energiaHeroi);
 		$('#heroi-luta-energia').html(energiaHeroi);
 		$('#status-batalha').val(2);
+		$("#list-luta-heroi").effect("shake");
+		swordSound.play();
 		$.ajax({
 	        url: 'controlador.php',
 	        type: 'POST',
@@ -438,7 +494,8 @@ function fcnBatalhar(heroiId){
 		$('#criatura-luta-energia').addClass('text-danger');		
 		$('#criatura-luta-energia').html(energiaCriatura);
 		$('#status-batalha').val(1);
-		
+		$("#list-luta-criatura").effect("shake");
+		swordSound.play();
 		if(sorteCriatura <= 0 ){
 			sorteCriatura = 0;
 			$("#btn-batalha-criatura").prop( "disabled", true );
@@ -450,7 +507,7 @@ function fcnBatalhar(heroiId){
 	}else if(sorteCriatura == sorteHeroi){ //empate
 		limparCor();
 		$("#btn-test-sort").prop( "disabled", true );
-		alert('Empate!');
+		wrongSound.play();
 	}
 	
 	
@@ -465,6 +522,8 @@ function limparCor(){
 
 function fcnTestarSorte(heroiId){
 	limparCor();
+	wrongSound = document.getElementById("wrong-song");
+	bellSound = document.getElementById("bell-song");
 	energiaHeroi = parseInt($('#heroi-luta-energia').html());
 	energiaCriatura = parseInt($('#criatura-luta-energia').html());
 	sorteHeroi = parseInt($('#heroi-luta-sorte').html());
@@ -479,10 +538,12 @@ function fcnTestarSorte(heroiId){
 			$('#criatura-luta-energia').addClass('text-danger');
 			energiaCriatura = energiaCriatura-1;		
 			$('#criatura-luta-energia').html(energiaCriatura);
+			bellSound.play();
 		}else{ //RUIM
 			$('#criatura-luta-energia').addClass('text-success');
 			energiaCriatura = energiaCriatura+1;		
 			$('#criatura-luta-energia').html(energiaCriatura);
+			wrongSound.play();
 		}
 	}else if(statusBatalha == 2){ //Monstro Atacou
 		if(sorte <= sorteHeroi){ //BOM
@@ -490,11 +551,13 @@ function fcnTestarSorte(heroiId){
 			$('#heroi-luta-energia').addClass('text-success');
 			$('#status-energia').val(energiaHeroi);
 			$('#heroi-luta-energia').html(energiaHeroi);
+			bellSound.play();
 		}else{ //RUIM
 			$('#heroi-luta-energia').addClass('text-danger');
 			energiaHeroi = energiaHeroi-1;
 			$('#status-energia').val(energiaHeroi);
 			$('#heroi-luta-energia').html(energiaHeroi);
+			wrongSound.play();
 		}
 	}
 	

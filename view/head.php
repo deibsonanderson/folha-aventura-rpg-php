@@ -7,11 +7,5 @@
 <link rel="shortcut icon" href="image/favicon.ico" />
 <title>Folha de Aventura</title>
 <meta name="viewport" content="width=device-width, user-scalable=no">
-
-<style type="text/css">
-/*body {
-  background-image: url("image/textura.jpg");
-  background-repeat: repeat-y;
-}*/
-</style>
+<link rel="stylesheet" href="./asset/jquery-ui.css">
 </head>

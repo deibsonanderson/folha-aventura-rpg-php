@@ -10,6 +10,22 @@ class ControladorHeroi
     // destruidor
     public function __destruct()
     {}
+    
+    public function incluirHeroi($post){
+        try {
+            $heroi = new Heroi();
+            
+            $heroi->setNome($post['nome']);
+            $heroi->setAventura($post['aventura']);
+            $heroi->setHabilidade($post['habilidade']);
+            $heroi->setEnergia($post['energia']);
+            $heroi->setSorte($post['sorte']);
+            $moduloHeroi = new DaoHeroi();
+            $moduloHeroi->incluirHeroi($heroi);            
+            $moduloHeroi->__destruct();
+        } catch (Exception $e) {
+        }
+    }	
 
     public function alterarHeroiHabilidade($post)
     {
