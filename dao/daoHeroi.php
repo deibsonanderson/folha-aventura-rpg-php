@@ -37,7 +37,9 @@ class DaoHeroi extends Dados
                                                     '" . $heroi->getSorte() . "',													    
 													'1')";
 
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução do insert heroi!');
+            mysqli_query($conexao,$sql) or die('Erro na execução do insert heroi!');
+            sleep(0.5);
+            $retorno = mysqli_insert_id($conexao);
             $this->FecharBanco($conexao);
             return $retorno;
         } catch (Exception $e) {

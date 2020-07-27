@@ -8,4 +8,5 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <link rel="stylesheet" href="./asset/jquery-ui.css">
 <link rel="stylesheet" href="./asset/timeline.css">
+<link rel="stylesheet" href="./asset/clean-tree-diagram.css">
 </head>

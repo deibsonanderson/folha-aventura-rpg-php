@@ -1,3 +1,8 @@
+function fcnCarregarModalMensagem(msg) {
+	$('#modal-span-mensagem').html(msg);
+	$('#modal-mensagem').modal('show');
+}
+
 function irPagina(id){
 	$('#heroi_id').val(id);
 	$('#form-heroi').submit(); 
@@ -72,22 +77,22 @@ function fncIncluirHeroi(){
 	sorteCriar = parseInt($('#modal-heroi-criar-sorte').val());	
 	
 	if(nomeCriar == null || nomeCriar == undefined || nomeCriar == ''){
-    	alert('O campo da nome deve ser preenchido!');
+		fcnCarregarModalMensagem('O campo da nome deve ser preenchido!');
 		return;
     }
 	
 	if(habilidadeCriar == null || habilidadeCriar == undefined || habilidadeCriar == '' || habilidadeCriar <= 0){
-    	alert('O campo habilidade deve ser superior a "0"!');
-		return;
+    	fcnCarregarModalMensagem('O campo habilidade deve ser superior a "0"!');
+    	return;
     }
 
 	if(energiaCriar == null || energiaCriar == undefined || energiaCriar == '' || energiaCriar <= 0){
-    	alert('O campo energia deve ser superior a "0"!');
+    	fcnCarregarModalMensagem('O campo energia deve ser superior a "0"!');
 		return;
     }
 	
 	if(sorteCriar == null || sorteCriar == undefined || sorteCriar == '' || sorteCriar <= 0){
-    	alert('O campo sorte deve ser superior a "0"!');
+    	fcnCarregarModalMensagem('O campo sorte deve ser superior a "0"!');
 		return;
     }
 
@@ -162,7 +167,6 @@ function fncAlterarHeroi(element, campo, propriedade){
 	        data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&valor=' + valor + '&heroi_id='+heroi_id,
 	        success: function(result) {
 	        	$('#'+campo).val(valor);
-	        	//$('#' + retorno).html(result);
 	        },
 	        beforeSend: function() {},
 	        complete: function() {},
@@ -171,10 +175,80 @@ function fncAlterarHeroi(element, campo, propriedade){
 	        }
 	    });
     }else{
-    	alert('Não pode exceder o limite inicial!');
+    	fcnCarregarModalMensagem('Não pode exceder o limite inicial!');
     }    
 }
 
+//HEROI FIM
+//ROTA INICIO
+function fncIncluirRotaHeroiTreeViewPai(id, rota, isExcluir){
+    $('#pai-status-rota').val(rota);
+    $('#pai-status-rota').attr('rota_id',id);
+    $('#pai-status-rota').attr('is-excluir',isExcluir);
+    $('#btn-status-rota').prop( "disabled", false );
+    if(isExcluir == 1){
+    	$("#btn-pai-status-rota").prop( "disabled", false );
+    }else{
+    	$("#btn-pai-status-rota").prop( "disabled", true );
+    }
+}
+
+function fcnCarregarModalRotaTreeView(heroiId) {
+	if($('#pai-status-rota').attr('is-excluir') == '1'){
+		$('#modal-rota-id').val($('#pai-status-rota').attr('rota_id'));
+		$('#modal-rota-heroi_id').val(heroiId);
+		$('#modal-manter-rota').modal('show');		
+	}else{
+		fcnCarregarModalMensagem('Você não pode excluir posições superiores!');
+	}
+	$('#pai-status-rota').val('');
+    $('#pai-status-rota').attr('rota_id','');
+    
+    $("#btn-pai-status-rota").prop( "disabled", true );
+}
+
+function fncIncluirRotaHeroiTreeView(element, campo){
+    controlador = $(element).attr('controlador');
+    funcao = $(element).attr('funcao');
+    retorno = $(element).attr('retorno');
+    heroi_id = $(element).attr('heroi_id');    
+    rota = $('#'+campo).val();
+    contexto = $('#contexto-rota-aventura').val();
+    rota_id = $('#pai-status-rota').attr('rota_id');
+    if(rota == null || rota == undefined || rota == ''){
+    	fcnCarregarModalMensagem('O campo da roda deve ser preenchido!');
+    	return;
+    }
+    
+    rota = parseInt(rota);
+    
+    if(rota <= 0){
+    	fcnCarregarModalMensagem('A rota deve ser superior a "0"!');
+		return;
+    }
+    
+    $.ajax({
+        url: 'controlador.php',
+        type: 'POST',
+        data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&rota=' + rota + '&heroi_id='+ heroi_id + '&rota_id='+rota_id+ '&contexto='+contexto,
+        success: function(result) {
+        	$('#'+campo).val('');
+			//$('#'+campo).focus();
+			$('#pai-status-rota').val('');
+		    $('#pai-status-rota').attr('rota_id','');
+		    $('#div-rota-card-body').html(result);
+		    $("#btn-pai-status-rota").prop( "disabled", true );
+		    $('#btn-status-rota').prop( "disabled", true );
+        },
+        beforeSend: function() {},
+        complete: function() {},
+        error: function (request, status, error) {
+        	$('#' + retorno).html('status:'+status+' messagem:'+request.responseText+' error:'+error);
+        }
+    });
+}
+
+/*
 function fncIncluirRotaHeroi(element, campo){
     controlador = $(element).attr('controlador');
     funcao = $(element).attr('funcao');
@@ -182,14 +256,14 @@ function fncIncluirRotaHeroi(element, campo){
     heroi_id = $(element).attr('heroi_id');    
     rota = $('#'+campo).val();
     if(rota == null || rota == undefined || rota == ''){
-    	alert('O campo da roda deve ser preenchido!');
+    	fcnCarregarModalMensagem('O campo da roda deve ser preenchido!');
 		return;
     }
     
     rota = parseInt(rota);
     
     if(rota <= 0){
-    	alert('A rota deve ser superior a "0"!');
+    	fcnCarregarModalMensagem('A rota deve ser superior a "0"!');
 		return;
     }
     
@@ -210,8 +284,6 @@ function fncIncluirRotaHeroi(element, campo){
     });
 }
 
-//HEROI FIM
-//ROTA INICIO
 function fcnAddTimeLineRota(rota, id, heroi_id){
 	quantidade = parseInt($('#quantidade-rotas').val());
 	position = $('#position-rota').val();
@@ -236,7 +308,7 @@ function fcnCarregarModalRota(id,heroiId) {
 	$('#modal-rota-id').val(id);
 	$('#modal-rota-heroi_id').val(heroiId);
 	$('#modal-manter-rota').modal('show');
-}
+}*/
 
 function fcnDeletarModalRota(){
 	id = $('#modal-rota-id').val();	
@@ -312,12 +384,12 @@ function fcnAtualizarModalInvent() {
 	heroi_id = $('#modal-invent-heroi_id').val();
 	
 	if(descricao == '' || descricao == null || descricao == undefined){
-		alert('O campo descrição deve ser preenchido!');
+		fcnCarregarModalMensagem('O campo descrição deve ser preenchido!');
 		return;
 	}
 	
 	if(quantidade == '' || quantidade == null || quantidade == undefined || parseInt(quantidade) <= 0){
-		alert('A quantidade deve ser maior que 0!');
+		fcnCarregarModalMensagem('A quantidade deve ser maior que 0!');
 		return;
 	}
 	
@@ -432,17 +504,17 @@ function fcnIniciarBatalhaModalCriatura(){
 	energia = $('#modal-criatura-energia').val();
 	
 	if(nome == '' || nome == null || nome == undefined){
-		alert('O campo nome deve ser preenchido!');
+		fcnCarregarModalMensagem('O campo nome deve ser preenchido!');
 		return;
 	}
 	
 	if(habilidade == '' || habilidade == null || habilidade == undefined || parseInt(habilidade) <= 0){
-		alert('A habilidade deve ser superior a 0!');
+		fcnCarregarModalMensagem('A habilidade deve ser superior a 0!');
 		return;
 	}
 	
 	if(energia == '' || energia == null || energia == undefined || parseInt(energia) <= 0){
-		alert('A energia deve ser superior a 0!');
+		fcnCarregarModalMensagem('A energia deve ser superior a 0!');
 		return;
 	}	
 	
@@ -502,17 +574,17 @@ function fcnBatalhar(heroiId){
 			energiaHeroi = 0;
 			$("#btn-batalha-criatura").prop( "disabled", true );
 			$("#btn-test-sort").prop( "disabled", true );
-			alert('Fim da batalha o herói morreu!');
+			fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
 			$('#status-batalha').val(0);
 		}else if(energiaHeroi == 0 && sorteHeroi > 0){
 			$("#btn-batalha-criatura").prop( "disabled", true );
 			$("#btn-test-sort").prop( "disabled", false );
-			alert('Tente a sorte!');
+			fcnCarregarModalMensagem('Tente a sorte!');
 			$('#status-batalha').val(2);
 		}else if(energiaHeroi == 0 && sorteHeroi <= 0){
 			$("#btn-batalha-criatura").prop( "disabled", true );
 			$("#btn-test-sort").prop( "disabled", true );
-			alert('Fim da batalha o herói morreu!');
+			fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
 			$('#status-batalha').val(0);
 
 		}
@@ -532,7 +604,7 @@ function fcnBatalhar(heroiId){
 			energiaCriatura = 0;
 			$("#btn-batalha-criatura").prop( "disabled", true );
 			$("#btn-test-sort").prop( "disabled", true );
-			alert('Fim da batalha o herói venceu!');
+			fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
 			$('#status-batalha').val(0);
 			$('#criatura-luta-energia').html(0);
 		}		
@@ -571,7 +643,7 @@ function fcnTestarSorte(heroiId){
 			$('#criatura-luta-energia').addClass('text-danger');
 			energiaCriatura = energiaCriatura-1;
 			if(energiaCriatura <= 0){
-				alert('Fim da batalha o herói venceu!');
+				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
 				energiaCriatura = 0;
 				$("#btn-batalha-criatura").prop( "disabled", true );
 			}
@@ -595,7 +667,7 @@ function fcnTestarSorte(heroiId){
 			$('#heroi-luta-energia').addClass('text-danger');
 			energiaHeroi = energiaHeroi-1;
 			if(energiaHeroi <= 0){
-				alert('Fim da batalha o herói morreu!');
+				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
 				energiaHeroi = 0;
 			}			
 			$('#status-energia').val(energiaHeroi);

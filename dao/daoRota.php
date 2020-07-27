@@ -16,13 +16,16 @@ class DaoRota extends Dados
         try {
             $retorno = array();
             $conexao = $this->conectarBanco();
-            $sql = "SELECT id, rota, heroi_id FROM tb_aventura_rota WHERE `heroi_id` = ".$heroiId." ORDER BY `id` DESC ";
+            $sql = "SELECT id, rota, heroi_id, rota_id, contexto FROM tb_aventura_rota WHERE `heroi_id` = ".$heroiId." ORDER BY `id` ASC ";
             $query = mysqli_query($conexao,$sql) or die('Erro na execução do listar rota!');
             while ($objetoRota = mysqli_fetch_object($query)) {
                 $rota = new Rota();
                 $rota->setId($objetoRota->id);
                 $rota->setRota($objetoRota->rota);
                 $rota->setHeroiId($objetoRota->heroi_id);
+                $rota->setRotaId($objetoRota->rota_id);
+                $rota->setContexto($objetoRota->contexto);
+                
                 $retorno[] = $rota;
             }
             $this->FecharBanco($conexao);
@@ -41,10 +44,14 @@ class DaoRota extends Dados
 
             $sql = "INSERT INTO tb_aventura_rota (  id,
 													rota,
-													heroi_id
+                                                    rota_id,
+                                                    contexto,
+													heroi_id                                                    
     												)VALUES(
     												NULL,												
     												'" . $rota->getRota() . "',
+                                                    '" . $rota->getRotaId() . "',
+                                                    '" . $rota->getContexto() . "',
     												'" . $rota->getHeroiId() . "')";
 
             $retorno = mysqli_query($conexao, $sql) or die('Erro na execução do insert rota!');

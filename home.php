@@ -25,6 +25,7 @@ $conexao = $dados->conectarBanco();
 	<?php include('view/modal-criatura.php'); ?>
 	<?php include('view/modal-rota.php'); ?>
 	<?php include('view/modal-inventario-excluir.php'); ?>
+	<?php include('view/modal-mensagem.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

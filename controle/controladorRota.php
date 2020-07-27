@@ -16,12 +16,14 @@ class ControladorRota
             $rota = new Rota();
             $rota->setRota($post['rota']);
             $rota->setHeroiId($post['heroi_id']);
+            $rota->setRotaId($post['rota_id']);
+            $rota->setContexto($post['contexto']);
             $moduloRota = new DaoRota();
             if($post['rota'] != '0' || $post['rota'] != null || $post['rota'] != ''){
-                $retorno = $moduloRota->incluirRota($rota);
+                $moduloRota->incluirRota($rota);
             }
             $moduloRota->__destruct();
-            return $retorno;
+            return $this->telaListaRotaTreeView($post);
         } catch (Exception $e) {}
     }
 
@@ -32,7 +34,8 @@ class ControladorRota
             $moduloRota = new DaoRota();
             $moduloRota->excluirRota($id);
             $moduloRota->__destruct();
-            return $this->telaListaRota($post);
+            //return $this->telaListaRota($post);
+            return $this->telaListaRotaTreeView($post);
         } catch (Exception $e) {
             return $e;
         }
@@ -47,6 +50,44 @@ class ControladorRota
         } catch (Exception $e) {
             return $e;
         }
+    }
+    
+    public function telaListaRotaTreeView($post) {
+        $rotas = $this->listarRota($post['heroi_id']);
+        foreach ($rotas as $rota) {
+            $filhos = null;
+            foreach($rotas as $rota2){
+                if($rota2->getRotaId() == $rota->getId()){
+                    $filhos[] = $rota2;
+                }
+            }
+            $rota->setFilhos($filhos);
+        }
+        
+        $html = '';
+        $html .= '<ul class="tree"><li id="'.$rotas[0]->getId().'">';
+        $html .= '<code onclick="fncIncluirRotaHeroiTreeViewPai('.$rotas[0]->getId().', '.$rotas[0]->getRota().',0)" class="text-white">'.$rotas[0]->getRota().'</code>';
+        $html .= $this->montarTreview($rotas[0]->getFilhos());
+        $html .= '</li></ul>';
+        
+        return $html;
+    }
+    
+    public function montarTreview($rotas){
+        $html = '';
+        $html .=  '<ul>';
+        if ($rotas != null && count($rotas) > 0) {
+             foreach ($rotas as $rota) {
+                 $isExluir = ($rota->getFilhos() == null || count($rota->getFilhos()) <= 0)?'1':'0';
+                 $html .=  '<li><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rota->getId().', '.$rota->getRota().','.$isExluir.')" class="text-white" style="font-size:100%">'.$rota->getRota().'</code>';
+                 if($rota->getFilhos() != null){
+                     $html .=  $this->montarTreview($rota->getFilhos());
+                }
+                 $html .=  '</li>';
+            }
+        }
+        $html .=  '</ul>';
+        return $html;
     }
     
     public function telaListaRota($post) {

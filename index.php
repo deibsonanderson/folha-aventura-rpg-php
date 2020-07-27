@@ -62,6 +62,7 @@ $herois = carregarHeroi($conexao);
     						<?php 
     						if ($herois != null && count($herois) > 0 ) {
     						    foreach ($herois as $heroi) {
+    						    $colorHeroi = ($heroi->energia > 0)?'text-danger':'';    
     						?>
     						<li id="list-heroi-<?php echo $heroi->heroi_id; ?>" class="list-group-item bg-dark text-white border border-light">
     							<table border="0">
@@ -70,7 +71,7 @@ $herois = carregarHeroi($conexao);
     										<div class="btn-toolbar justify-content-between"
     											role="toolbar" aria-label="Toolbar with button groups">
     											<div class="btn-group" role="group" aria-label="First group">
-    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome"><a class="text-danger"><b><?php echo $heroi->nome; ?></b></a></h5>												
+    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome"><a class="<?php echo $colorHeroi; ?>"><b><?php echo $heroi->nome; ?></b></a></h5>												
     											</div>
     											<div class="input-group">
     												<button onclick="fcnCarregarModalHeroi(<?php echo $heroi->heroi_id; ?>);"						                				
@@ -107,6 +108,7 @@ $herois = carregarHeroi($conexao);
 	</div>
 	<?php include('view/modal-heroi.php'); ?>
 	<?php include('view/modal-heroi-criar.php'); ?>
+	<?php include('view/modal-mensagem.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

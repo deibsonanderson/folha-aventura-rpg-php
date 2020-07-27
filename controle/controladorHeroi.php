@@ -21,8 +21,15 @@ class ControladorHeroi
             $heroi->setEnergia($post['energia']);
             $heroi->setSorte($post['sorte']);
             $moduloHeroi = new DaoHeroi();
-            $moduloHeroi->incluirHeroi($heroi);            
+            $id = $moduloHeroi->incluirHeroi($heroi);
             $moduloHeroi->__destruct();
+            
+            $moduloRota = new DaoRota();            
+            $rota = new Rota();
+            $rota->setRota(1);
+            $rota->setHeroiId($id);                        
+            $moduloRota->incluirRota($rota);
+            $moduloRota->__destruct();
         } catch (Exception $e) {
         }
     }	
