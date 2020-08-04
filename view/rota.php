@@ -13,6 +13,27 @@ function carrgarRota($conexao, $heroiId){
     }
     return $rotas;
 }
+
+function retornoCor($rota){
+	if($rota->contexto == 0){
+			if($rota->filhos != null){
+				return 'background-color:DIMGREY;';	
+			}else{
+				return '';
+			}
+	}else if($rota->contexto == 1){
+		return 'background-color:darkblue;';
+	}else if($rota->contexto == 2){
+		return 'background-color:black;';
+	}else if($rota->contexto == 3){
+		return 'background-color:saddlebrown';
+	}else if($rota->contexto == 4){
+		return 'background-color:RED;';
+	}else if($rota->contexto == 5){
+		return 'background-color:GREEN;';
+	}
+}
+
 $rotas = carrgarRota($conexao, $heroi->heroi_id);
 ?>
 <div class="tab-pane fade" id="rota" role="tabpanel" aria-labelledby="rota-tab">
@@ -63,9 +84,8 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
                             <option value="1">Bom</option>
                             <option value="2">Ruim</option>
                             <option value="3">Batalha</option>
-                            <option value="4">Sorte</option>
-                            <option value="5">Morte</option>
-                            <option value="6">Final</option>
+                            <option value="4">Morte</option>
+                            <option value="5">Final</option>
                         </select>					
                     </div>
     			</div>
@@ -87,15 +107,17 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
                 $rota->filhos = $array;
             }
             
-            echo '<ul class="tree"><li id="'.$rotas[0]->id.'"><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rotas[0]->id.', '.$rotas[0]->rota.',0)" class="text-white">'.$rotas[0]->rota.'</code>';
+            echo '<ul class="tree"><li id="'.$rotas[0]->id.'"><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rotas[0]->id.', '.$rotas[0]->rota.',0)" class="text-white" style="font-size:100%;background-color:GREEN;">'.$rotas[0]->rota.'</code>';
             function montarTreview($rotas){
                 echo '<ul>';
                 if ($rotas != null && count($rotas) > 0) {
                     foreach ($rotas as $rota) {
                         $isExluir = ($rota->filhos == null || count($rota->filhos) <= 0)?'1':'0';                        
-                        echo '<li><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rota->id.', '.$rota->rota.','.$isExluir.')" class="text-white" style="font-size:100%">'.$rota->rota.'</code>';
                         if($rota->filhos != null){
+							echo '<li><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rota->id.', '.$rota->rota.','.$isExluir.')" class="text-white" style="font-size:100%;'.retornoCor($rota).'">'.$rota->rota.'</code>';
                             echo montarTreview($rota->filhos);
+                        }else{
+							echo '<li><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rota->id.', '.$rota->rota.','.$isExluir.')" class="text-white" style="font-size:100%;'.retornoCor($rota).'">'.$rota->rota.'</code>';
                         }
                         echo '</li>';
                     }
