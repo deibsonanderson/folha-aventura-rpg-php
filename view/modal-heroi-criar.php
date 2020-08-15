@@ -109,9 +109,34 @@
 				</div>				
 			</div>
 			<div class="modal-footer">
+				<button type="button"  onclick="fncGerarHeroi();" class="btn btn-primary" >Gerar Heroi</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" onclick="fncIncluirHeroi();" class="btn btn-danger">Confirmar</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script>
+function fncGerarHeroi(){
+		nomes = ['If','Tyunn','Aun','Tyorgrirn','Vorrus','Grafralf','Raslerd','Thrunskulr','Eirkmuvoth','Stappaekkag','Sguf','Smik','Fralf','Brelgaumm','Ghortmir','Rhendraek','Relpamm','Neredr','Norngestaet','Hofnolsaern','Gwo','Kiog','Gweih','Teigde','Fulhif','Velfhus','Algra','Ghindrin','Murkuta','Soymalhu','Trul','Grun','Rhi','Asvah','Grergi','Gridieh','Trifoth','Fraeymuh','Fegnirsti','Galgrieyma','Urhan','Ejamar','Qrutrix','Oruxeor','Ushan','Ugovras','Igoxium','Ataz','Ilrolius','Azadium','Oharad','Olozor','Qruprix','Qraqium','Oligron','Ophior','Equam','Grijahr','Aharis','Olzoxon','Aqinn','Aharise','Anydae','Atosh','Neharise','Estrea','Arexone','Nubis','Ulobelle','Rephaen','Udephyx','Ewaelle','Nughis','Chodeis','Asizith','Zivia','Phazohra','Nivile','Omiharise','Uzogaell'];
+
+		$('#modal-heroi-criar-nome').val(nomes[Math.floor((Math.random() * 79)+1)])
+	
+	//habilidade
+		habilidade = Math.floor((Math.random() * 6)+1);
+		habilidade += 6;
+		$('#modal-heroi-criar-habilidade').val(habilidade);	
+	//energia
+		energia = Math.floor((Math.random() * 6)+1);
+		energia += Math.floor((Math.random() * 6)+1);
+		energia += 12;
+		$('#modal-heroi-criar-energia').val(energia);
+	//sorte
+		sorte = Math.floor((Math.random() * 6)+1);
+		sorte += 6;
+		$('#modal-heroi-criar-sorte').val(sorte);
+		
+}
+
+</script>
