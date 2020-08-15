@@ -95,7 +95,7 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
 
 	<div class="card bg-dark text-white">
 		<div class="card-body" style="margin: auto;">
-			<div id="div-rota-card-body" style="overflow: auto">	
+			<div id="div-rota-card-body" style="overflow: auto;max-width:300px;">	
             <?php 
             foreach ($rotas as $rota) {
                 $array = null;  

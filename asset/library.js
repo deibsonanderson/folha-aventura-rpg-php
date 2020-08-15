@@ -33,26 +33,34 @@ function validarLimite(valor, limite){
 	}
 }
 
-function rolarDado(){
+function rolarDado(heroiId){
 	$('#imagem-dado').attr('src','image/dado-animado.gif');
 	diceSound = document.getElementById("dice-song"); 
 	qtdDados = parseInt($('#input-dados').val());
+	isAtivo = $("input[name=dado-teste-sorte]").prop("checked");
+	$('#dado-result-total').removeClass('text-success');
+	$('#dado-result-total').removeClass('text-danger');
+		
 	if(qtdDados > 0){
 		diceSound.play();
 		//vibracao(500);
-		setTimeout(function(){ 
-				
-				$('#dado-result').html('');
-				total = 0;
-				for(i=1; i<=qtdDados;i++){
-					numero = Math.floor((Math.random() * 6)+1);
-					if(qtdDados > 1){
-						$('#dado-result').append('<span>Dado Nº'+i+' valor = <b>'+numero+'</b></span><br/>');
-					}	
-					total += numero;		
-				}
-				$('#dado-result-total').html('Resultado total: <b>'+total+'</b>');
-				$('#imagem-dado').attr('src','image/dado-static.png');
+		setTimeout(function(){
+			$('#dado-result').html('');
+			total = 0;
+			for(i=1; i<=qtdDados;i++){
+				numero = Math.floor((Math.random() * 6)+1);
+				if(qtdDados > 1){
+					$('#dado-result').append('<span>Dado Nº'+i+' valor = <b>'+numero+'</b></span><br/>');
+				}	
+				total += numero;		
+			}
+			
+			if(isAtivo == true){
+				fcnTestarSorteSimples(heroiId, total);
+			}
+			
+			$('#dado-result-total').html('Resultado total: <b>'+total+'</b>');
+			$('#imagem-dado').attr('src','image/dado-static.png');
 		}, 1500);
 	}else{
 		$('#dado-result-total').html('Resultado total: inválido!');
@@ -623,6 +631,39 @@ function limparCor(){
 	$('#criatura-luta-energia').removeClass('text-success');
 	$('#criatura-luta-energia').removeClass('text-danger');
     $('#heroi-luta-energia').removeClass('text-danger');
+}
+
+function fcnTestarSorteSimples(heroiId,sorteDados){
+	sorteHeroi = parseInt($('#status-sorte').val());
+	wrongSound = document.getElementById("wrong-song");
+	bellSound = document.getElementById("bell-song");
+	energiaHeroi = parseInt($('#status-energia').val());
+	
+	if(sorteHeroi > 0){
+		if(sorteDados <= sorteHeroi){
+			bellSound.play();
+			$('#dado-result-total').addClass('text-success');
+		}else{
+			wrongSound.play();
+			$('#dado-result-total').addClass('text-danger');
+		}
+		sorteHeroi = sorteHeroi - 1;
+		$('#status-sorte').val(sorteHeroi);
+		$('#heroi-luta-sorte').html(sorteHeroi);
+		
+		
+		$.ajax({
+	        url: 'controlador.php',
+	        type: 'POST',
+	        data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergiaSorte&energia=' + energiaHeroi + '&sorte=' + sorteHeroi + '&heroi_id='+heroiId,
+	        success: function(result) {},
+	        beforeSend: function() {},
+	        complete: function() {},
+	        error: function (request, status, error) {}
+	    });	
+		
+		
+	}
 }
 
 function fcnTestarSorte(heroiId){

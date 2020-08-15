@@ -34,6 +34,47 @@ $conexao = $dados->conectarBanco();
           		<?php include('view/pc_rota.php'); ?>          		
         	</div>
 		</div>
+		<div class="row">
+			<div class="col-12">
+      			<div class="card bg-dark text-white" style="border: none;">
+            		<div class="" style="margin: auto;">
+            			<div id="div-rota-card-body" style="overflow: auto;max-width: 1024px;">	
+                        <?php 
+                        foreach ($rotas as $rota) {
+                            $array = null;  
+                            foreach($rotas as $rota2){
+                                if($rota2->rota_id == $rota->id){
+                                    $array[] = $rota2;
+                                }
+                            }
+                            $rota->filhos = $array;
+                        }
+                        
+                        echo '<ul class="tree"><li id="'.$rotas[0]->id.'"><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rotas[0]->id.', '.$rotas[0]->rota.',0)" class="text-white" style="font-size:100%;background-color:GREEN;">'.$rotas[0]->rota.'</code>';
+                        function montarTreview($rotas){
+                            echo '<ul>';
+                            if ($rotas != null && count($rotas) > 0) {
+                                foreach ($rotas as $rota) {
+                                    $isExluir = ($rota->filhos == null || count($rota->filhos) <= 0)?'1':'0';                        
+                                    if($rota->filhos != null){
+            							echo '<li><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rota->id.', '.$rota->rota.','.$isExluir.')" class="text-white" style="font-size:100%;'.retornoCor($rota).'">'.$rota->rota.'</code>';
+                                        echo montarTreview($rota->filhos);
+                                    }else{
+            							echo '<li><code onclick="fncIncluirRotaHeroiTreeViewPai('.$rota->id.', '.$rota->rota.','.$isExluir.')" class="text-white" style="font-size:100%;'.retornoCor($rota).'">'.$rota->rota.'</code>';
+                                    }
+                                    echo '</li>';
+                                }
+                            }
+                            echo '</ul>';
+                        }
+                        echo montarTreview($rotas[0]->filhos);
+                        echo '</li></ul>';
+                        ?>	
+            			</div>
+            		</div>
+            	</div>           		
+        	</div>
+		</div>
 	</div>
 	<?php include('view/modal-inventario.php'); ?>
 	<?php include('view/modal-criatura.php'); ?>
