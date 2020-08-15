@@ -72,49 +72,6 @@ class ControladorCriatura
         }
     }
 
-    public function telaCadastrarCriatura($post = null)
-    {
-        try {
-            $viewCriatura = new ViewCriatura();
-            return $viewCriatura->telaCadastrarCriatura($post);
-            $viewCriatura->__destruct();
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public function telaListarCriatura($post = null)
-    {
-        try {
-            $viewCriatura = new ViewCriatura();
-            return $viewCriatura->telaListarCriatura($this->listarCriatura(null));
-            $viewCriatura->__destruct();
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public function telaAlterarCriatura($post = null)
-    {
-        try {
-            $viewCriatura = new ViewCriatura();
-            return $viewCriatura->telaAlterarCriatura($this->listarCriatura($post['id']));
-            $viewCriatura->__destruct();
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public function telaVisualizarCriatura($post = null)
-    {
-        try {
-            $viewCriatura = new ViewCriatura();
-            return $viewCriatura->telaVisualizarCriatura($this->listarCriatura($post['id']));
-            $viewCriatura->__destruct();
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
 }
 ?>
 			

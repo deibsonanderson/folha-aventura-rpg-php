@@ -14,8 +14,7 @@ $conexao = $dados->conectarBanco();
 	<?php include('view/navegador.php'); ?>
 	<?php include('view/abas.php'); ?>
 	<div class="tab-content bg-dark text-white" id="tab-content">
-		<div id="div_retorno"></div>
-    	<?php include('view/status.php'); ?> <!-- status-tab -->
+		<?php include('view/status.php'); ?> <!-- status-tab -->
     	<?php include('view/inventario.php'); ?> <!-- inventory-tab -->
     	<?php include('view/criatura.php'); ?> <!-- enemy-tab -->
     	<?php include('view/rota.php'); ?> <!-- rota-tab -->

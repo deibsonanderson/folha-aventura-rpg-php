@@ -24,20 +24,17 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 				id="inventario-<?php echo $inventario->id; ?>">
 				<span id="inventario-span-desc-<?php echo $inventario->id; ?>" ><?php echo $inventario->descricao; ?></span>
 				<span id="inventario-span-quant-<?php echo $inventario->id; ?>" 
-				class="badge badge-secondary badge-pill" style="color: #fff;background-color: #6c757d !important;"><?php echo $inventario->quantidade; ?></span>
+				class="badge badge-secondary badge-pill"><?php echo $inventario->quantidade; ?></span>
 			</li>
 	<?php   } 
         }
 	}    
 }
 ?>
-<div class="tab-pane fade" id="inventory" role="tabpanel"
+<div class="" id="inventory" role="tabpanel"
 	aria-labelledby="inventory-tab">
-	<div class="card bg-dark text-white">
-		<div class="card-body">
-			<h5 class="card-title">
-				
-			</h5>
+	<div class="bg-dark text-white">
+		<div class="">
 			<div class="row">
 				<div class="col-3">
 					<div class="nav flex-column nav-pills" id="v-pills-tab"

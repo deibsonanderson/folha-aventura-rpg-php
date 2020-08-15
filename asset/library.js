@@ -433,7 +433,7 @@ function addInventario(id, descricao, quantidade, heroi_id, tipo){
 		 $html += 'heroi_id="'+heroi_id+'"';
 		 $html += 'id="inventario-'+id+'">';
     		 $html += '<span id="inventario-span-desc-'+id+'" >'+descricao+'</span>';
-    		 $html += '<span id="inventario-span-quant-'+id+'" class="badge badge-primary badge-pill">'+quantidade+'</span>';
+    		 $html += '<span id="inventario-span-quant-'+id+'" class="badge badge-secondary badge-pill">'+quantidade+'</span>';
 	 $html += '</li>';
 	 
 	 switch (tipo) {

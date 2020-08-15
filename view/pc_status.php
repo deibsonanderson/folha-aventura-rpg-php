@@ -52,9 +52,9 @@ if(isset($_POST["heroi_id"])){
 }
 $heroi = carregarHeroi($conexao, $heroiId);
 ?>
-<div class="tab-pane fade show active" id="status" role="tabpanel" aria-labelledby="status-tab">
-	<div class="card bg-dark text-white">
-		<div class="card-body">
+<div class="" id="status" role="tabpanel" aria-labelledby="status-tab">
+	<div class="bg-dark text-white">
+		<div class="">
 			<div class="form-row">
 				<div class="col-md-12">
 					<label for="button-addon4" class="col-md-12">Habilidade: (inicial: 

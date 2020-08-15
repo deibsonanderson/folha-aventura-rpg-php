@@ -36,9 +36,9 @@ function retornoCor($rota){
 
 $rotas = carrgarRota($conexao, $heroi->heroi_id);
 ?>
-<div class="tab-pane fade" id="rota" role="tabpanel" aria-labelledby="rota-tab">
-	<div class="card bg-dark text-white">
-		<div class="card-body">
+<div class="" id="rota" role="tabpanel" aria-labelledby="rota-tab">
+	<div class="bg-dark text-white">
+		<div class="">
 			<div class="form-row">
 				<div class="col-md-12">
 					<label for="button-addon4" class="col-md-12">Rota Origem:</label>
@@ -93,8 +93,8 @@ $rotas = carrgarRota($conexao, $heroi->heroi_id);
 		</div>
 	</div>
 
-	<div class="card bg-dark text-white">
-		<div class="card-body" style="margin: auto;">
+	<div class="card bg-dark text-white" style="border: none;">
+		<div class="" style="margin: auto;">
 			<div id="div-rota-card-body" style="overflow: auto">	
             <?php 
             foreach ($rotas as $rota) {
