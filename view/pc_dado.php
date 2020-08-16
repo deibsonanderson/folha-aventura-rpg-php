@@ -21,11 +21,11 @@
 			<div class="form-group">
                 <label for="button-addon4" class="">Teste de Sorte:&nbsp;&nbsp;</label>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" checked="checked" type="radio" name="dado-teste-sorte" id="dado-teste-sorte1" value="1">
+                  <input class="form-check-input" type="radio" name="dado-teste-sorte" id="dado-teste-sorte1" value="1">
                   <label class="form-check-label" for="inlineRadio1">Ativo</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="dado-teste-sorte" id="dado-teste-sorte2" value="2">
+                  <input class="form-check-input" checked="checked" type="radio" name="dado-teste-sorte" id="dado-teste-sorte2" value="2">
                   <label class="form-check-label" for="inlineRadio2">Inativo</label>
                 </div>
 			</div>			

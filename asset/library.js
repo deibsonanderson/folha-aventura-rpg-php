@@ -404,6 +404,9 @@ function addInventario(id, descricao, quantidade, heroi_id, tipo){
 		case '5':
 			$('#list-group-pista').prepend($html);
 			break;
+		case '6':
+			$('#list-group-magias').prepend($html);
+			break;			
 	}	 
 
 }
@@ -506,12 +509,13 @@ function fcnBatalhar(heroiId){
 	$("#btn-test-sort").prop( "disabled", false );
 	
 	if(sorteCriatura > sorteHeroi){ //Criatura Ataca
+		fncEfeitoCombat(2);
 		energiaHeroi = energiaHeroi-2;
 		$('#heroi-luta-energia').addClass('text-danger');
 		$('#status-batalha').val(2);
-		$("#list-luta-heroi").effect("shake");
+		
 		sorteHeroi = parseInt($('#heroi-luta-sorte').html());
-		swordSound.play();
+		
 		$.ajax({
 	        url: 'controlador.php',
 	        type: 'POST',
@@ -543,14 +547,13 @@ function fcnBatalhar(heroiId){
 		
 		$('#status-energia').val(energiaHeroi);
 		$('#heroi-luta-energia').html(energiaHeroi);
-		fncEfeitoCombat(2);
+		
 	}else if(sorteCriatura < sorteHeroi){ //Heroi Ataca
+		fncEfeitoCombat(1);
 		energiaCriatura = energiaCriatura-2;
 		$('#criatura-luta-energia').addClass('text-danger');		
 		$('#criatura-luta-energia').html(energiaCriatura);
 		$('#status-batalha').val(1);
-		$("#list-luta-criatura").effect("shake");
-		swordSound.play();
 		
 		if(energiaCriatura <= 0 ){
 			energiaCriatura = 0;
@@ -560,14 +563,13 @@ function fcnBatalhar(heroiId){
 			$('#status-batalha').val(0);
 			$('#criatura-luta-energia').html(0);
 		}		
-		fncEfeitoCombat(1);
+		
 	}else if(sorteCriatura == sorteHeroi){ //empate
 		limparCor();
 		$("#btn-test-sort").prop( "disabled", true );
 		wrongSound.play();		
 	}
-	
-	
+		
 }
 
 function limparCor(){
@@ -677,7 +679,6 @@ function fcnTestarSorte(heroiId){
     });	
 }
 
-
 function fncAlterarEnergiaCriatura(id, campo, propriedade){
     energia = parseInt($('#'+campo).html());
     
@@ -760,6 +761,7 @@ function addCriatura(id, nome, habilidade, energia, heroi_id, nome){
 function fncEfeitoCombat(isHero){
 	$('#hero-art').css('z-index', 5);
 	$('#monster-art').css('z-index', 5);
+	$('#monster-art').css('width', '400px');
 	if(detectarMobile() == true){
 		$('#monster-art').css('left','300px');
 		$('#hero-art').css('left','-250px');
@@ -785,66 +787,189 @@ function fncEfeitoCombat(isHero){
 }
 
 function fncMoveActionCombatMobile(hero, monster,isHero){
+	swordSound = document.getElementById("sword-song");
+	wrongSound = document.getElementById("wrong-song");
+	
 	if(isHero == 1){
 		$('#hero-art').animate({
 	      left: hero+'px',
 	      opacity: '0.5'
-	    }, 1500, function(){
-			$('#hero-art').css('z-index', 0);
-			$('#monster-art').css('z-index', 0);
+	    }, 1000, function(){
 			$('#hero-art').animate({
 				opacity: '0.0',
-			},'fast');
+			},'fast',function(){
+				
+				$('#hero-art').css('z-index', -5);
+				$('#monster-art').css('z-index', 5);
+				$('#monster-art').css('left', '20px');
+				$('#monster-art').animate({
+					opacity: '0.5',
+				},'fast',function(){
+					
+					$("#list-luta-criatura").effect("shake");
+					swordSound.play();
+					
+					$("#monster-art").effect("shake",function(){
+						$('#monster-art').animate({
+							opacity: '0.0'
+						},'fast',function(){
+							$('#monster-art').css('z-index', -5);
+						});						
+					});
+				});
+				
+			});
 		});
 	}else if(isHero == 2){
 		$('#monster-art').animate({
 	      left: monster+'px',
 	      opacity: '0.5'
-	    },1500, function(){
-			$('#hero-art').css('z-index', 0);
-			$('#monster-art').css('z-index', 0);
+	    },1000, function(){
 			$('#monster-art').animate({
 				opacity: '0.0',
-			},'fast');
+			},'fast',function(){
+				
+				$('#monster-art').css('z-index', -5);
+				$('#hero-art').css('z-index', 5);
+				$('#hero-art').css('left', '20px');
+				$('#hero-art').animate({
+					opacity: '0.5',
+				},'fast',function(){
+					
+					$("#list-luta-heroi").effect("shake");
+					swordSound.play();
+					
+					$("#hero-art").effect("shake",function(){
+						$('#hero-art').animate({
+							opacity: '0.0'
+						},'fast',function(){
+							$('#hero-art').css('z-index', -5);
+						});						
+					});
+				});
+				
+			});
 		});
 	}
 	
 }
 
 function fncMoveActionCombat(hero, monster,isHero){
+	swordSound = document.getElementById("sword-song");
+	wrongSound = document.getElementById("wrong-song");
+	
 	$('#hero-art').animate({
-      left: hero+'px',
-      opacity: '0.5'
-    }, 800, 'linear');
+	  left: hero+'px',
+	  opacity: '0.5'
+	}, 800, 'linear');
+	
 	$('#monster-art').animate({
-      left: monster+'px',
-      opacity: '0.5'
-    }, 800, 'linear');
-	if(isHero == 1){
-		$("#monster-art").effect("shake",function(){
-			$('#hero-art').animate({
-				opacity: '0.0'
-			}); 
-			$('#monster-art').animate({
-				opacity: '0.0',
-			},'fast',function(){
-				$('#hero-art').css('z-index', 0);
-				$('#monster-art').css('z-index', 0);	
+	  left: monster+'px',
+	  opacity: '0.5'
+	}, 800, function(){
+
+		if(isHero == 1){
+			
+			swordSound.play();
+			
+			$(".monster-list-art").effect("shake",function(){
+					
+				$('#hero-art').animate({
+					opacity: '0.0'
+				}); 
+				$('#monster-art').animate({
+					opacity: '0.0',
+				},'fast',function(){
+					$('#hero-art').css('z-index', 0);
+					$('#monster-art').css('z-index', 0);	
+				});
+			});		
+		}else if(isHero == 2){
+			
+			swordSound.play();
+			
+			$(".heroi-list-art").effect("shake",function(){
+				
+				$('#hero-art').animate({
+					opacity: '0.0'
+				}); 
+				$('#monster-art').animate({
+					opacity: '0.0'
+				},'fast',function(){
+					$('#hero-art').css('z-index', 0);
+					$('#monster-art').css('z-index', 0);	
+				}); 			
 			});
-		});		
-	}else if(isHero == 2){
-		$("#hero-art").effect("shake",function(){
-			$('#hero-art').animate({
-				opacity: '0.0'
-			}); 
-			$('#monster-art').animate({
-				opacity: '0.0'
-			},'fast',function(){
-				$('#hero-art').css('z-index', 0);
-				$('#monster-art').css('z-index', 0);	
-			}); 			
-		});
-	}
+		}			
+		
+	});
+	
+	
+	
+//	if(isHero == 1){
+//		$('#hero-art').animate({
+//	      left: hero+'px'
+//	    }, 1000, function(){
+//			$('#hero-art').animate({
+//				opacity: '0.0',
+//			},'fast',function(){
+//				
+//				$('#hero-art').css('z-index', -5);
+//				$('#monster-art').css('z-index', 5);
+//				//$('#monster-art').css('left', '20px');
+//				$('#monster-art').animate({
+//					opacity: '0.5',
+//					left: monster+'px'
+//				},'fast',function(){
+//					
+//					$("#list-luta-criatura").effect("shake");
+//					swordSound.play();
+//					
+//					$("#monster-art").effect("shake",function(){
+//						$('#monster-art').animate({
+//							opacity: '0.0'
+//						},'fast',function(){
+//							$('#monster-art').css('z-index', -5);
+//						});						
+//					});
+//				});
+//				
+//			});
+//		});
+//	}else if(isHero == 2){
+//		$('#monster-art').animate({
+//	      left: monster+'px'
+//	    },1000, function(){
+//			$('#monster-art').animate({
+//				opacity: '0.0',
+//			},'fast',function(){
+//				
+//				$('#monster-art').css('z-index', -5);
+//				$('#hero-art').css('z-index', 5);
+//				//$('#hero-art').css('left', '20px');
+//				$('#hero-art').animate({
+//					opacity: '0.5',
+//					left: hero+'px'
+//				},'fast',function(){
+//					
+//					$("#list-luta-heroi").effect("shake");
+//					swordSound.play();
+//					
+//					$("#hero-art").effect("shake",function(){
+//						$('#hero-art').animate({
+//							opacity: '0.0'
+//						},'fast',function(){
+//							$('#hero-art').css('z-index', -5);
+//						});						
+//					});
+//				});
+//				
+//			});
+//		});
+//	}
+	
+	
+
 	
 }
 //CRIATURA FIM

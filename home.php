@@ -13,7 +13,7 @@ $conexao = $dados->conectarBanco();
 <body class="bg-dark text-white">
 	<?php include('view/navegador.php'); ?>
 	<img alt="hero-art" id="hero-art" src="./image/hero-art.png" style="width:300px;position: absolute;z-index: -5;opacity:0.0;">
-	<img alt="monster-art" id="monster-art" src="./image/monster-art.png" style="left:1000px;width:400px;position: absolute;z-index: -5;opacity:0.0;">
+	<img alt="monster-art" id="monster-art" src="./image/monster-art.png" style="left:0px;width:300px;position: absolute;z-index: -5;opacity:0.0;">
 	<?php include('view/abas.php'); ?>
 	<div class="tab-content bg-dark text-white" id="tab-content">
 		<?php include('view/status.php'); ?> <!-- status-tab -->

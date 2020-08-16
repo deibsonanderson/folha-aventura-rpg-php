@@ -8,7 +8,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="list-group" id="list-group-criatura">
-						<li id="list-luta-heroi" class="list-group-item bg-dark text-white border border-light">
+						<li id="list-luta-heroi" class="heroi-list-art list-group-item bg-dark text-white border border-light">
 							<table border="0"  style="width: 100%;">
 								<tr>
 									<td style="text-align: center;" colspan="2">
@@ -39,7 +39,7 @@
 							</table>
 						</li>
 						
-						<li id="list-luta-criatura" class="list-group-item bg-dark text-white border border-light">
+						<li id="list-luta-criatura" class="monster-list-art list-group-item bg-dark text-white border border-light">
 							<table border="0" style="width: 100%;">
 								<tr>
 									<td style="text-align: center;" colspan="2">
