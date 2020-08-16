@@ -13,6 +13,8 @@ $conexao = $dados->conectarBanco();
 <body class="bg-dark text-white">
 	<?php include('view/navegador.php'); ?>
 	<br/>
+	<img alt="hero-art" id="hero-art" src="./image/hero-art.png" style="width:300px;position: absolute;z-index: 0;opacity:0.0;">
+	<img alt="monster-art" id="monster-art" src="./image/monster-art.png" style="left:1000px;width:400px;position: absolute;z-index: 0;opacity:0.0;">
 	<div class="container">
 		<div class="row">
     		<div class="col-4">
