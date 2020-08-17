@@ -9,8 +9,8 @@ $conexao = $dados->conectarBanco();
 
 if(isset($_POST["inputEmail"]) && isset($_POST["inputPassword"])  &&  $_POST["inputEmail"] != null && $_POST["inputPassword"] != null){
     
-    $email = $_POST["inputEmail"];
-    $password = md5($_POST["inputPassword"]);
+    $email = trim($_POST["inputEmail"]);
+    $password = md5(trim($_POST["inputPassword"]));
     
     $sql = "SELECT u.`id`,
                    u.`email`,
@@ -28,6 +28,8 @@ if(isset($_POST["inputEmail"]) && isset($_POST["inputPassword"])  &&  $_POST["in
     if($user != null && $user->id != null){
         $_SESSION["login"] = $user->id;
         header('Location: main.php');
+    }else{
+        echo '<script>alert("Não foi possivel logar favor checar o email e password!"); history.back();</script>';
     }
 }
 ?>
@@ -50,6 +52,7 @@ if(isset($_POST["inputEmail"]) && isset($_POST["inputPassword"])  &&  $_POST["in
         </label>
       </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Logar</button>
+      <a class="btn btn-lg btn-danger btn-block" href="usuario.php" >Criar</a>
       <p class="mt-5 mb-3 text-muted">© 2020</p>
     </form>
   
