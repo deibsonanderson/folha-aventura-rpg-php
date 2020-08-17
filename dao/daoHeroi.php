@@ -24,6 +24,8 @@ class DaoHeroi extends Dados
                                                       habilidade_inicial,
                                                       energia_inicial,
                                                       sorte_inicial,
+                                                      user_id,
+                                                      data_criacao,
                 									  status
 													)VALUES(
 													NULL,
@@ -34,7 +36,9 @@ class DaoHeroi extends Dados
                                                     '" . $heroi->getSorte() . "',
                                                     '" . $heroi->getHabilidade() . "',
                                                     '" . $heroi->getEnergia() . "',
-                                                    '" . $heroi->getSorte() . "',													    
+                                                    '" . $heroi->getSorte() . "',
+                                                    '" . $heroi->getUserId() . "',
+                                                    NOW(),													    
 													'1')";
 
             mysqli_query($conexao,$sql) or die('Erro na execução do insert heroi!');
@@ -103,8 +107,16 @@ class DaoHeroi extends Dados
     {
         try {
             $conexao = $this->conectarBanco();
-            $sql = "UPDATE tb_aventura_heroi SET status = '0' WHERE id = " . $id;
+            
+            $sql = "DELETE FROM tb_aventura_inventario WHERE heroi_id = " . $id;
+            mysqli_query($conexao, $sql) or die('Erro na execução do delet!');
+            
+            $sql = "DELETE FROM tb_aventura_rota WHERE heroi_id = " . $id . "";
+            mysqli_query($conexao, $sql) or die('Erro na execução do delet rota!');
+            
+            $sql = "DELETE FROM tb_aventura_heroi WHERE id = " . $id . "";
             $retorno = mysqli_query($conexao, $sql) or die('Erro na execução do delet rota!');
+            
             $this->FecharBanco($conexao);
             return $retorno;
         } catch (Exception $e) {

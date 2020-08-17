@@ -226,3 +226,10 @@ ALTER TABLE `tb_aventura_inventario`
 --
 ALTER TABLE `tb_aventura_rota`
   ADD CONSTRAINT `tb_aventura_rota_ibfk_1` FOREIGN KEY (`heroi_id`) REFERENCES `tb_aventura_heroi` (`id`);
+
+-- ALTER TABLE `tb_aventura_heroi` CHANGE `user_id` `user_id` INT(11) NOT NULL;  
+  
+-- script para limpar objetos  
+-- DELETE FROM tb_aventura_rota WHERE heroi_id IN (SELECT id FROM `tb_aventura_heroi` WHERE `data_criacao` <= '2020-08-17');
+-- DELETE FROM tb_aventura_inventario WHERE heroi_id IN (SELECT id FROM `tb_aventura_heroi` WHERE `data_criacao` <= '2020-08-17');
+-- DELETE FROM `tb_aventura_heroi` WHERE `data_criacao` <= '2020-08-17';  

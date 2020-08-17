@@ -8,6 +8,7 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+			<input type="hidden" id="modal-heroi-criar-user-id" value="<?php echo $_SESSION["login"]; ?>">
 			<div class="modal-body">
 				<input type="hidden" class="form-control" id="modal-criatura-heroi_id" >
 				<div class="form-group">
@@ -85,6 +86,10 @@
                         <option>Fortaleza dos Pesadelos</option>
                         <option>Punhais da Escuridão</option>
                         <option>A Cripta do Feiticeiro</option>
+                        <option>A Ilha do Rei Lagarto</option>
+                        <option>Ossos Sangrentos</option>
+                        <option>Sangue de Zumbis</option>
+                        <option>O Porto Do Perigo</option>
                         <option>Exércitos da Morte</option>
                         <option>Escravos do Abismo</option>
                         <option>Sky Lord</option>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
 require_once "classe/Dados.php";
 

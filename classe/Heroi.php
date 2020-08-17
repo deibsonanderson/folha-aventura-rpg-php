@@ -23,6 +23,8 @@
         private $sorte_inicial;
 
         private $aventura;
+        
+        private $userId;
 
         // construtor
         public function __construct()
@@ -132,5 +134,17 @@
         {
             $this->sorte_inicial = $valor;
         }
+        
+        public function getUserId()
+        {
+            return $this->userId;
+        }
+        
+        public function setUserId($valor)
+        {
+            $this->userId = $valor;
+        }
+        
+        
     }
     ?>

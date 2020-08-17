@@ -1,133 +1,61 @@
-<?php
+<?php 
+session_start();
+unset($_SESSION["login"]);
 error_reporting (E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
 
 require_once "classe/Dados.php";
 $dados = new Dados();
 $conexao = $dados->conectarBanco();
 
-function carregarHeroi($conexao){
-    $sql = "SELECT h.`id` as heroi_id,
-               h.`nome`,
-               h.`aventura`,
-               h.`status`,
-               h.`habilidade`,
-               h.`habilidade_inicial`,
-               h.`energia`,
-               h.`energia_inicial`,
-               h.`sorte`,
-               h.`sorte_inicial`
-        FROM `tb_aventura_heroi` h
-        WHERE h.`status` = 1";
+if(isset($_POST["inputEmail"]) && isset($_POST["inputPassword"])  &&  $_POST["inputEmail"] != null && $_POST["inputPassword"] != null){
     
-    $query = mysqli_query($conexao,$sql) or die('erro nos carregar heroi e status');
-    $herois = null;
+    $email = $_POST["inputEmail"];
+    $password = md5($_POST["inputPassword"]);
+    
+    $sql = "SELECT u.`id`,
+                   u.`email`,
+                   u.`password`               
+        FROM `tb_aventura_user` u
+        WHERE u.`email` = '".$email."' AND u.password = '".$password."'";
+    
+    $query = mysqli_query($conexao,$sql) or die('erro nos carregar login');
+    $user = null;
     while ($objItem = mysqli_fetch_object($query)) {
-        $herois[] = $objItem;
+        $user = $objItem;
+        break;
     }
-    return $herois;
+    
+    if($user != null && $user->id != null){
+        $_SESSION["login"] = $user->id;
+        header('Location: main.php');
+    }
 }
-
-$herois = carregarHeroi($conexao);
 ?>
+
 <!doctype html>
 <html lang="en">
 <?php include('view/head.php'); ?>
-<body class="bg-dark text-white">
-	<?php include('view/navegador.php'); ?>
-	<div class="tab-content bg-dark text-white" id="tab-content">		
-    	<div class="card bg-dark text-white">
-    	
-    		<form id="form-heroi" method="post" action="home.php">
-    			<input type="hidden" id="heroi_id" name="heroi_id">
-    		</form>
-    		<div class="card-body">
-    			<div class="btn-toolbar justify-content-between"
-						role="toolbar" aria-label="Toolbar with button groups">
-						<div class="btn-group" role="group" aria-label="First group">
-							<h5 style="margin-top: 5px;"><a class="">Heróis</a></h5>												
-						</div>
-						<div class="input-group">
-							<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalCriarHeroi()"><b>+</b></a>							
-						</div>											
-					</div>
-    			
-    			<h5 class="card-title text-align: center;">
-    			</h5>
-    			<h5 class="card-title">				
-    								
-    			</h5>
-    			<div class="row">
-    				<div class="col-md-12">
-    					<ul class="list-group" id="list-group-heroi" style="align-items: center;">
-    						<?php 
-    						if ($herois != null && count($herois) > 0 ) {
-    						    foreach ($herois as $heroi) {
-    						    $colorHeroi = ($heroi->energia > 0)?'text-danger':'';    
-    						?>
-    						<li id="list-heroi-<?php echo $heroi->heroi_id; ?>" class="list-group-item bg-dark text-white border border-light">
-    							<table border="0">
-    								<tr>
-    									<td style="min-width: 270px; text-align: center;" colspan="2">
-    										<div class="btn-toolbar justify-content-between"
-    											role="toolbar" aria-label="Toolbar with button groups">
-    											<div class="btn-group" role="group" aria-label="First group">
-    												<h5 style="margin-top: 5px;" onclick="irPagina(<?php echo $heroi->heroi_id; ?>)" id="criatura-luta-nome"><a class="<?php echo $colorHeroi; ?>"><b><?php echo $heroi->nome; ?></b></a></h5>												
-    											</div>
-    											<div class="input-group">
-    												<button onclick="fcnCarregarModalHeroi(<?php echo $heroi->heroi_id; ?>);"						                				
-    														type="button" class="btn btn-danger"><b>x</b></button>
-    											</div>											
-    										</div>
-    									</td>
-    								</tr>
-    								<tr>
-    									<td style="min-width: 135px;">Habilidade: (<?php echo $heroi->habilidade_inicial; ?>)</td>
-    									<td style="min-width: 135px; text-align: right;"><b id="criatura-luta-habilidade"><?php echo $heroi->habilidade; ?></b></td>
-    								</tr>
-    								<tr>
-    									<td>Energia: (<?php echo $heroi->energia_inicial; ?>)</td>
-    									<td style="text-align: right;"><b id="criatura-luta-energia"><?php echo $heroi->energia; ?></b></td>
-    								</tr>
-    								<tr>
-    									<td>Sorte: (<?php echo $heroi->sorte_inicial; ?>)</td>
-    									<td style="text-align: right;"><b id="criatura-luta-resultado"><?php echo $heroi->sorte; ?></b></td>
-    								</tr>
-    								<tr>
-    									<td colspan="2" style="text-align: center;"><?php echo $heroi->aventura; ?></td>    									
-    								</tr>							
-    							</table>
-    						</li>
-    						
-    						<?php }
-    						}?>						
-    					</ul>
-    				</div>
-    			</div>
-    		</div>
-    	</div>	
-	</div>
-	<?php include('view/modal-heroi.php'); ?>
-	<?php include('view/modal-heroi-criar.php'); ?>
-	<?php include('view/modal-mensagem.php'); ?>
-</body>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<?php include('view/required.php'); 
+<link rel="stylesheet" href="./asset/signin.css">
+  <body class="text-center bg-dark text-white" cz-shortcut-listen="true">
+    <form class="form-signin" method="POST" action="#">
+      <img class="mb-4" src="./image/fighting_fantasy_logo.png" alt="" width="100">
+      <h1 class="h3 mb-3 font-weight-normal">Favor se logar</h1>
+      <label for="inputEmail" class="sr-only">Email</label>
+      <input name="inputEmail" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required="required">
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Lembrar-me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Logar</button>
+      <p class="mt-5 mb-3 text-muted">© 2020</p>
+    </form>
+  
+
+</body></html>
+<?php 
+include('view/required.php');
 $dados->FecharBanco($conexao);
 ?>
-<audio id="myAudio" style="display: none;">
-  <source src="./asset/dice.jpg" type="audio/mpeg">
-</audio>
-<script>
-$( document ).ready(function() {
-	var isMobile = detectarMobile();
-    if(isMobile == true){
-		$('#form-heroi').attr('action','home.php');
-    }else if(isMobile == false){
-    	$('#form-heroi').attr('action','pc_home.php');
-    }
-});
-
-</script>
-
-</html>

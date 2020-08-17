@@ -20,6 +20,7 @@ class ControladorHeroi
             $heroi->setHabilidade($post['habilidade']);
             $heroi->setEnergia($post['energia']);
             $heroi->setSorte($post['sorte']);
+            $heroi->setUserId($post['user_id']);
             $moduloHeroi = new DaoHeroi();
             $id = $moduloHeroi->incluirHeroi($heroi);
             $moduloHeroi->__destruct();
