@@ -47,9 +47,9 @@ if(isset($_POST["inputEmail"]) && isset($_POST["inputPassword"])  &&  $_POST["in
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required="required">
       <div class="checkbox mb-3">
-        <label>
+        <!-- label>
           <input type="checkbox" value="remember-me"> Lembrar-me
-        </label>
+        </label-->
       </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Logar</button>
       <a class="btn btn-lg btn-danger btn-block" href="usuario.php" >Criar</a>

@@ -67,6 +67,7 @@
 								<tr>
 									<td style="min-width: 270px; text-align: center;" colspan="2">
 										<div class="btn-group" role="group" aria-label="">
+											<button type="button" id="btn-batalha-auto" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalharAutomatica(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Auto</button>
 											<button type="button" id="btn-test-sort" style="margin-top: 10px;" disabled="disabled" onclick="fcnTestarSorte(<?php echo $heroi->heroi_id; ?>)" class="btn btn-secondary">Tentar Sorte</button>
 											<button type="button" id="btn-batalha-criatura" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Batalhar</button>
 										</div>

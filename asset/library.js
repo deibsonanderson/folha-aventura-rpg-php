@@ -495,9 +495,74 @@ function fcnIniciarBatalhaModalCriatura(){
 	$('#criatura-luta-habilidade').html(habilidade);
 	
 	$("#btn-batalha-criatura").prop( "disabled", false );
+	$("#btn-batalha-auto").prop( "disabled", false );
+	
 	$("#btn-test-sort").prop( "disabled", true );
 	
 	limparCor();
+}
+
+function fcnBatalharAutomatica(heroiId){
+	$("#btn-batalha-criatura").prop( "disabled", true );
+	$("#btn-batalha-auto").prop( "disabled", true );	
+	$("#btn-test-sort").prop( "disabled", true );
+
+	swordSound = document.getElementById("sword-song");
+	wrongSound = document.getElementById("wrong-song");
+	
+	energiaHeroi = parseInt($('#heroi-luta-energia').html());
+	energiaCriatura = parseInt($('#criatura-luta-energia').html());
+	
+	habilidadeHeroi = parseInt($('#heroi-luta-habilidade').html());
+	habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());
+
+	while(energiaHeroi > 0 && energiaCriatura > 0){
+
+		sorteCriatura = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura;
+		sorteHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi;
+		
+		if(sorteCriatura > sorteHeroi){ //Criatura Ataca
+			energiaHeroi = energiaHeroi-2;
+			if(energiaHeroi <= 0){
+				energiaHeroi = 0;
+				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
+				fncEfeitoCombat(2);
+				break;
+			}
+		}else if(sorteCriatura < sorteHeroi){ //Heroi Ataca
+			energiaCriatura = energiaCriatura-2;
+			if(energiaCriatura <= 0 ){
+				energiaCriatura = 0;
+				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
+				fncEfeitoCombat(1);
+				break;
+			}		
+		}		
+	}
+
+	$('#status-batalha').val(0);
+	$('#status-energia').val(energiaHeroi);
+	$('#heroi-luta-energia').html(energiaHeroi);
+	$('#criatura-luta-energia').html(0);
+	
+	$.ajax({
+        url: 'controlador.php',
+        type: 'POST',
+        data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergia&valor=' + energiaHeroi + '&heroi_id='+heroiId,
+        success: function(result) {},
+        beforeSend: function() {},
+        complete: function() {},
+        error: function (request, status, error) {}
+    });
+	
+}
+
+function sleep(milliseconds) {
+	const date = Date.now();
+	let currentDate = null;
+	do {
+		currentDate = Date.now();
+	} while (currentDate - date < milliseconds);
 }
 
 function fcnBatalhar(heroiId){
