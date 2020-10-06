@@ -57,6 +57,9 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 						<a class="nav-link" id="v-pills-magias-tab" data-toggle="pill" href="#v-pills-magias" role="tab" aria-controls="v-pills-magias" aria-selected="false">
 							<img alt="" src="image/Icon.6_79.png" style="width: 30px;">
 						</a>
+						<a class="nav-link" id="v-pills-pericias-tab" data-toggle="pill" href="#v-pills-pericias" role="tab" aria-controls="v-pills-pericias" aria-selected="false">
+							<img alt="" src="image/Icon.4_80.png" style="width: 30px;">
+						</a>						
 					</div>
 				</div>
 				<div class="col-9">
@@ -95,8 +98,7 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 							<ul id="list-group-pista" class="list-group">
 								<?php echo carregarIventario($inventarios, 5,$heroi->heroi_id); ?>
 							</ul>
-						</div>
-						
+						</div>						
 						<div class="tab-pane fade" id="v-pills-magias" role="tabpanel"
 							aria-labelledby="v-pills-magias-tab">
 							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(6,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Magias & Feitiços</i>
@@ -104,7 +106,13 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 								<?php echo carregarIventario($inventarios, 6, $heroi->heroi_id); ?>
 							</ul>
 						</div>
-						
+						<div class="tab-pane fade" id="v-pills-pericias" role="tabpanel"
+							aria-labelledby="v-pills-pericias-tab">
+							<a href="#" style="margin-bottom: 10px;" class="btn btn-secondary" onclick="fcnCarregarModalIncluirInvent(7,<?php echo $heroi->heroi_id; ?>)">+</a>&nbsp;&nbsp;<i>Pericias & Modificações</i>
+							<ul id="list-group-pericias" class="list-group">
+								<?php echo carregarIventario($inventarios, 7, $heroi->heroi_id); ?>
+							</ul>
+						</div>							
 					</div>
 				</div>
 			</div>

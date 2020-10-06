@@ -21,9 +21,15 @@ class DaoHeroi extends Dados
                                                       habilidade,
                                                       energia,
                                                       sorte,
+                                                      honra,
                                                       habilidade_inicial,
                                                       energia_inicial,
                                                       sorte_inicial,
+                                                      honra_inicial,
+                                                      poder_fogo,
+                                                      poder_fogo_inicial,
+                                                      blindagem,
+                                                      blindagem_inicial,
                                                       user_id,
                                                       data_criacao,
                 									  status
@@ -34,9 +40,15 @@ class DaoHeroi extends Dados
                                                     '" . $heroi->getHabilidade() . "',
                                                     '" . $heroi->getEnergia() . "',
                                                     '" . $heroi->getSorte() . "',
+                                                    '" . $heroi->getHonra() . "',
                                                     '" . $heroi->getHabilidade() . "',
                                                     '" . $heroi->getEnergia() . "',
                                                     '" . $heroi->getSorte() . "',
+                                                    '" . $heroi->getHonra_inicial() . "', 
+                                                    '" . $heroi->getPoder_fogo() . "',
+                                                    '" . $heroi->getPoder_fogo() . "', 
+                                                    '" . $heroi->getBlindagem() . "',
+                                                    '" . $heroi->getBlindagem() . "',                                                    
                                                     '" . $heroi->getUserId() . "',
                                                     NOW(),													    
 													'1')";
@@ -76,6 +88,48 @@ class DaoHeroi extends Dados
             return $e;
         }
     }
+    
+    public function alterarHeroiHonra($heroi)
+    {
+        try {
+            $conexao = $this->conectarBanco();
+            $sql = "UPDATE tb_aventura_heroi SET honra = '" . $heroi->getHonra() . "' WHERE id = " . $heroi->getId();
+            $retorno = mysqli_query($conexao, $sql) or die('Erro na execução do update de status habilidade!');
+            $this->FecharBanco($conexao);
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    
+    
+    public function alterarHeroiPoderFogo($heroi)
+    {
+        try {
+            $conexao = $this->conectarBanco();
+            $sql = "UPDATE tb_aventura_heroi SET poder_fogo = '" . $heroi->getPoder_fogo() . "' WHERE id = " . $heroi->getId();
+            $retorno = mysqli_query($conexao, $sql) or die('Erro na execução do update de status habilidade!');
+            $this->FecharBanco($conexao);
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    
+    
+    public function alterarHeroiBlindagem($heroi)
+    {
+        try {
+            $conexao = $this->conectarBanco();
+            $sql = "UPDATE tb_aventura_heroi SET blindagem = '" . $heroi->getBlindagem() . "' WHERE id = " . $heroi->getId();
+            $retorno = mysqli_query($conexao, $sql) or die('Erro na execução do update de status habilidade!');
+            $this->FecharBanco($conexao);
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    
     
     public function alterarHeroiEnergiaSorte($heroi)
     {

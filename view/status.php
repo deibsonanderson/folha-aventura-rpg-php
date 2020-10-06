@@ -9,8 +9,14 @@ function carregarHeroi($conexao,$heroiId ){
                h.`habilidade_inicial`,
                h.`energia`,
                h.`energia_inicial`,
+               h.`honra`,
+               h.`honra_inicial`,
                h.`sorte`,
-               h.`sorte_inicial`
+               h.`sorte_inicial`,
+               h.`poder_fogo`,
+               h.`poder_fogo_inicial`,
+               h.`blindagem`,
+               h.`blindagem_inicial`
         FROM `tb_aventura_heroi` h
         WHERE h.`id` = ".$heroiId." AND h.`status` = 1";
     
@@ -89,7 +95,47 @@ $heroi = carregarHeroi($conexao, $heroiId);
 						    'ControladorHeroi', 'status-sorte', $heroi->sorte); ?>
 					</div>
 				</div>
-			</div>			
+			</div>
+			<?php if($heroi->aventura == 'A Espada do Samurai'){  ?>
+			<br />
+			<div class="form-row">
+				<div class="col-md-12">
+					<label for="button-addon4" class="col-md-12">Honra: (máximo: 
+						<span id="status-honra-inicial"><?php echo $heroi->honra_inicial; ?></span>)
+					</label>
+					<div class="input-group col-md-12">
+						<?php echo carregarCampoStatus($heroi->heroi_id, 'alterarHeroiHonra', 
+						    'ControladorHeroi', 'status-honra', $heroi->honra); ?>
+					</div>
+				</div>
+			</div>				
+			<?php } ?>
+			<?php if($heroi->aventura == 'O Guerreiro das Estradas'){  ?>	
+			<br />
+			<div class="form-row">
+				<div class="col-md-12">
+					<label for="button-addon4" class="col-md-12">Poder de Fogo: (inicial: 
+						<span id="status-poder-fogo-inicial"><?php echo $heroi->poder_fogo_inicial; ?></span>)
+					</label>
+					<div class="input-group col-md-12">
+						<?php echo carregarCampoStatus($heroi->heroi_id, 'alterarHeroiPoderFogo', 
+						    'ControladorHeroi', 'status-poder-fogo', $heroi->poder_fogo); ?>
+					</div>
+				</div>
+			</div>	
+			<br />
+			<div class="form-row">
+				<div class="col-md-12">
+					<label for="button-addon4" class="col-md-12">Blindagem: (inicial: 
+						<span id="status-blindagem-inicial"><?php echo $heroi->blindagem_inicial; ?></span>)
+					</label>
+					<div class="input-group col-md-12">
+						<?php echo carregarCampoStatus($heroi->heroi_id, 'alterarHeroiBlindagem', 
+						    'ControladorHeroi', 'status-blindagem', $heroi->blindagem); ?>
+					</div>
+				</div>
+			</div>							
+			<?php } ?>												
 		</div>
 	</div>	
 </div>

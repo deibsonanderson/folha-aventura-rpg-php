@@ -85,6 +85,8 @@ function fcnCarregarModalCriarHeroi() {
 	$('#modal-heroi-criar-habilidade').val(0);
 	$('#modal-heroi-criar-energia').val(0);
 	$('#modal-heroi-criar-sorte').val(0);	
+	$('#modal-heroi-criar-poder-fogo').val(0);
+	$('#modal-heroi-criar-blindagem').val(0);		
 	$('#modal-manter-heroi-criar').modal('show');
 }
 
@@ -96,6 +98,9 @@ function fncIncluirHeroi(){
 	energiaCriar = parseInt($('#modal-heroi-criar-energia').val());
 	sorteCriar = parseInt($('#modal-heroi-criar-sorte').val());
 	userId = $('#modal-heroi-criar-user-id').val();
+	
+	poderFogo = parseInt($('#modal-heroi-criar-poder-fogo').val());
+	blindagem = parseInt($('#modal-heroi-criar-blindagem').val());
 	
 	if(userId == null || userId == undefined || userId == ''){
 		fcnCarregarModalMensagem('Não foi póssivel criar o heroi favor recarregar a pagina!');
@@ -127,9 +132,10 @@ function fncIncluirHeroi(){
     $.ajax({
         url: 'controlador.php',
         type: 'POST',
-        data: 'controlador=ControladorHeroi&funcao=incluirHeroi&nome=' + nomeCriar + '&aventura='+aventuraCriar+ '&habilidade='+habilidadeCriar+ '&energia='+energiaCriar+ '&sorte='+sorteCriar+ '&user_id='+userId,
+        data: 'controlador=ControladorHeroi&funcao=incluirHeroi&nome=' + nomeCriar + '&aventura='+aventuraCriar+ '&habilidade='+habilidadeCriar+ 
+        '&energia='+energiaCriar+ '&sorte='+sorteCriar+ '&user_id='+userId+ '&poder_fogo='+ poderFogo + '&blindagem='+blindagem,
         success: function(result) {
-        	//location.reload();        	
+        	location.reload();        	
         },
         beforeSend: function() {},
         complete: function() {},
@@ -418,6 +424,9 @@ function addInventario(id, descricao, quantidade, heroi_id, tipo){
 			break;
 		case '6':
 			$('#list-group-magias').prepend($html);
+			break;
+		case '7':
+			$('#list-group-pericias').prepend($html);
 			break;			
 	}	 
 

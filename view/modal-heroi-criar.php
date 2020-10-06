@@ -58,9 +58,38 @@
 						</div>
 					</div>
 				</div>
+				<div class="form-group guerreiros" style="display: none;">
+					<label for="button-addon4" class="">Poder de Fogo:</label>
+					<div class="input-group ">
+						<div class="input-group-prepend">
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('modal-heroi-criar-poder-fogo',0)" type="button">Menos (-)</button>
+						</div>
+						<input type="number" readonly="true" class="form-control text-center"
+							placeholder="" aria-label="Example text with two button addons"
+							aria-describedby="button-addon3" id="modal-heroi-criar-poder-fogo">
+						<div class="input-group-append">
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('modal-heroi-criar-poder-fogo',1)" type="button">Mais (+)</button>
+						</div>
+					</div>
+				</div>
+				<div class="form-group guerreiros" style="display: none;">
+					<label for="button-addon4" class="">Blindagem:</label>
+					<div class="input-group ">
+						<div class="input-group-prepend">
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('modal-heroi-criar-blindagem',0)" type="button">Menos (-)</button>
+						</div>
+						<input type="number" readonly="true" class="form-control text-center"
+							placeholder="" aria-label="Example text with two button addons"
+							aria-describedby="button-addon3" id="modal-heroi-criar-blindagem">
+						<div class="input-group-append">
+							<button class="btn btn-secondary" onclick="fncAlterarNumber('modal-heroi-criar-blindagem',1)" type="button">Mais (+)</button>
+						</div>
+					</div>
+				</div>				
+				
 				<div class="form-group">
 					<label for="button-addon4" class="">Aventura:</label>
-					<select class="form-control" id="modal-heroi-criar-aventura">
+					<select class="form-control" id="modal-heroi-criar-aventura"  onchange="fncCheckAventura(this)">
                         <option>A Cidadela do Caos</option>
                         <option>O Feiticeiro da Montanha de Fogo</option>
                         <option>A Floresta da Destruição</option>
@@ -123,6 +152,17 @@
 </div>
 
 <script>
+
+function fncCheckAventura(element){
+	aventura = $(element).val();
+	if(aventura == 'O Guerreiro das Estradas'){
+		$('.guerreiros').css('display','');
+	}else{
+		$('.guerreiros').css('display','none');
+	}
+	
+}
+
 function fncGerarHeroi(){
 		nomes = ['If','Tyunn','Aun','Tyorgrirn','Vorrus','Grafralf','Raslerd','Thrunskulr','Eirkmuvoth','Stappaekkag','Sguf','Smik','Fralf','Brelgaumm','Ghortmir','Rhendraek','Relpamm','Neredr','Norngestaet','Hofnolsaern','Gwo','Kiog','Gweih','Teigde','Fulhif','Velfhus','Algra','Ghindrin','Murkuta','Soymalhu','Trul','Grun','Rhi','Asvah','Grergi','Gridieh','Trifoth','Fraeymuh','Fegnirsti','Galgrieyma','Urhan','Ejamar','Qrutrix','Oruxeor','Ushan','Ugovras','Igoxium','Ataz','Ilrolius','Azadium','Oharad','Olozor','Qruprix','Qraqium','Oligron','Ophior','Equam','Grijahr','Aharis','Olzoxon','Aqinn','Aharise','Anydae','Atosh','Neharise','Estrea','Arexone','Nubis','Ulobelle','Rephaen','Udephyx','Ewaelle','Nughis','Chodeis','Asizith','Zivia','Phazohra','Nivile','Omiharise','Uzogaell'];
 
@@ -141,6 +181,14 @@ function fncGerarHeroi(){
 		sorte = Math.floor((Math.random() * 6)+1);
 		sorte += 6;
 		$('#modal-heroi-criar-sorte').val(sorte);
+	//poder-fogo
+		poderFogo = Math.floor((Math.random() * 6)+1);
+		poderFogo += 6;
+		$('#modal-heroi-criar-poder-fogo').val(poderFogo);		
+	//blindagem
+		blindagem = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1);
+		blindagem += 12;
+		$('#modal-heroi-criar-blindagem').val(blindagem);				
 		
 }
 

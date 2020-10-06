@@ -25,6 +25,18 @@
         private $aventura;
         
         private $userId;
+        
+        private $honra;
+        
+        private $honra_inicial;
+        
+        private $poder_fogo;
+        
+        private $poder_fogo_inicial;
+        
+        private $blindagem;
+        
+        private $blindagem_inicial;
 
         // construtor
         public function __construct()
@@ -144,6 +156,66 @@
         {
             $this->userId = $valor;
         }
+        
+        public function getHonra()
+        {
+            return $this->honra;
+        }
+        
+        public function getHonra_inicial()
+        {
+            return $this->honra_inicial;
+        }
+        
+        public function setHonra($honra)
+        {
+            $this->honra = $honra;
+        }
+        
+        public function setHonra_inicial($honra_inicial)
+        {
+            $this->honra_inicial = $honra_inicial;
+        }
+        
+        public function getPoder_fogo()
+        {
+            return $this->poder_fogo;
+        }
+        
+        public function getPoder_fogo_inicial()
+        {
+            return $this->poder_fogo_inicial;
+        }
+        
+        public function getBlindagem()
+        {
+            return $this->blindagem;
+        }
+        
+        public function getBlindagem_inicial()
+        {
+            return $this->blindagem_inicial;
+        }
+        
+        public function setPoder_fogo($poder_fogo)
+        {
+            $this->poder_fogo = $poder_fogo;
+        }
+        
+        public function setPoder_fogo_inicial($poder_fogo_inicial)
+        {
+            $this->poder_fogo_inicial = $poder_fogo_inicial;
+        }
+        
+        public function setBlindagem($blindagem)
+        {
+            $this->blindagem = $blindagem;
+        }
+        
+        public function setBlindagem_inicial($blindagem_inicial)
+        {
+            $this->blindagem_inicial = $blindagem_inicial;
+        }   
         
         
     }

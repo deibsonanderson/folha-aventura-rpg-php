@@ -20,6 +20,10 @@ class ControladorHeroi
             $heroi->setHabilidade($post['habilidade']);
             $heroi->setEnergia($post['energia']);
             $heroi->setSorte($post['sorte']);
+            $heroi->setPoder_fogo($post['poder_fogo']);
+            $heroi->setBlindagem($post['blindagem']);            
+            $heroi->setHonra(3);
+            $heroi->setHonra_inicial(99);
             $heroi->setUserId($post['user_id']);
             $moduloHeroi = new DaoHeroi();
             $id = $moduloHeroi->incluirHeroi($heroi);
@@ -56,6 +60,40 @@ class ControladorHeroi
         $modulo->alterarHeroiEnergia($heroi);
         $modulo->__destruct();
     }
+    
+    public function alterarHeroiHonra($post)
+    {
+        $heroi = new Heroi();
+        $heroi->setHonra($post['valor']);
+        $heroi->setId($post['heroi_id']);
+        
+        $modulo = new DaoHeroi();
+        $modulo->alterarHeroiHonra($heroi);
+        $modulo->__destruct();
+    }
+    
+    public function alterarHeroiPoderFogo($post)
+    {
+        $heroi = new Heroi();
+        $heroi->setPoder_fogo($post['valor']);
+        $heroi->setId($post['heroi_id']);
+        
+        $modulo = new DaoHeroi();
+        $modulo->alterarHeroiPoderFogo($heroi);
+        $modulo->__destruct();
+    }
+    
+    public function alterarHeroiBlindagem($post)
+    {
+        $heroi = new Heroi();
+        $heroi->setBlindagem($post['valor']);
+        $heroi->setId($post['heroi_id']);
+        
+        $modulo = new DaoHeroi();
+        $modulo->alterarHeroiBlindagem($heroi);
+        $modulo->__destruct();
+    }
+    
     
     public function alterarHeroiEnergiaSorte($post)
     {
