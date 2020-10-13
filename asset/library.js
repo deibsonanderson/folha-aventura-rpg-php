@@ -52,12 +52,13 @@ function rolarDado(heroiId){
 	isAtivo = $("input[name=dado-teste-sorte]").prop("checked");
 	$('#dado-result-total').removeClass('text-success');
 	$('#dado-result-total').removeClass('text-danger');
-		
+	ajuste = parseInt($('#input-dados-ajuste').val());
+	
 	if(qtdDados > 0){
 		diceSound.play();
 		//vibracao(500);
 		setTimeout(function(){
-			$('#dado-result').html('');
+			$('#dado-result').html('<span>Ajuste valor = <b>'+ajuste+'</b></span><br/>');
 			total = 0;
 			for(i=1; i<=qtdDados;i++){
 				numero = Math.floor((Math.random() * 6)+1);
@@ -70,8 +71,8 @@ function rolarDado(heroiId){
 			if(isAtivo == true){
 				fcnTestarSorteSimples(heroiId, total);
 			}
-			
-			$('#dado-result-total').html('Resultado total: <b>'+total+'</b>');
+			total += ajuste;
+			$('#dado-result-total').html('Resultado total + ajuste: <b>'+total+'</b>');
 			$('#imagem-dado').attr('src','image/dado-static.png');
 		}, 1500);
 	}else{

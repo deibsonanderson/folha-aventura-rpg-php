@@ -19,6 +19,20 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<label for="button-addon4" class="">Ajuste:</label>
+				<div class="input-group ">
+					<div class="input-group-prepend">
+						<button class="btn btn-secondary" onclick="fncAlterarNumber('input-dados-ajuste',0,99)" type="button">Menos (-)</button>
+					</div>
+					<input type="number" readonly="true" class="form-control text-center"
+						placeholder="" aria-label="Example text with two button addons"
+						aria-describedby="button-addon3" id="input-dados-ajuste" value="0">
+					<div class="input-group-append">
+						<button class="btn btn-secondary" onclick="fncAlterarNumber('input-dados-ajuste',1,99)" type="button">Mais (+)</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
                 <label for="button-addon4" class="">Teste de Sorte:&nbsp;&nbsp;</label>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" name="dado-teste-sorte" id="dado-teste-sorte1" value="1">
@@ -30,7 +44,7 @@
                 </div>
 			</div>			
 			<p class="card-text">Clique no dado para gerar o resultado.</p>
-			<p class="card-text" id="dado-result-total">Resultado total:</p>
+			<p class="card-text" id="dado-result-total">Resultado total + ajuste:</p>
 			<p class="card-text" id="dado-result"></p>
 		</div>
 	</div>
