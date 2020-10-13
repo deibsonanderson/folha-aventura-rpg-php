@@ -62,7 +62,7 @@ function rolarDado(heroiId){
 			total = 0;
 			for(i=1; i<=qtdDados;i++){
 				numero = Math.floor((Math.random() * 6)+1);
-				if(qtdDados > 1){
+				if(qtdDados > 0){
 					$('#dado-result').append('<span>Dado Nº'+i+' valor = <b>'+numero+'</b></span><br/>');
 				}	
 				total += numero;		
