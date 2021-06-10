@@ -2,8 +2,12 @@
 	<div class="bg-dark text-white">
 		<div class="">
 			<h5 class="card-title">
-				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">Iniciar a batalha</a>
+				<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirCriatura(<?php echo $heroi->heroi_id; ?>);">Corpo a Corpo</a>
+				<?php if($heroi->aventura == 'O Guerreiro das Estradas'){  ?>	
+					<a href="#" class="btn btn-secondary" onclick="fcnCarregarModalIncluirVeiculoInimigo(<?php echo $heroi->heroi_id; ?>);">Veiculo</a>
+				<?php } ?>	
 				<input type="hidden" class="form-control" id="status-batalha" value="0" >
+				<input type="hidden" class="form-control" id="tipo-batalha" value="0" >				
 			</h5>
 			<div class="row">
 				<div class="col-md-12">
@@ -21,11 +25,11 @@
 									</td>
 								</tr>
 								<tr>
-									<td style="">Habilidade:</td>
+									<td id="texto-criatura-habilidade" style="">Habilidade:</td>
 									<td style="text-align: right;"><b id="heroi-luta-habilidade"><?php echo $heroi->habilidade; ?></b></td>
 								</tr>
 								<tr>
-									<td>Energia:</td>
+									<td id="texto-criatura-energia">Energia:</td>
 									<td style="text-align: right;"><b id="heroi-luta-energia"><?php echo $heroi->energia; ?></b></td>
 								</tr>
 								<tr>
@@ -52,11 +56,11 @@
 									</td>
 								</tr>
 								<tr>
-									<td style="">Habilidade:</td>
+									<td id="texto-criatura-luta-habilidade" style="">Habilidade:</td>
 									<td style=" text-align: right;"><b id="criatura-luta-habilidade"></b></td>
 								</tr>
 								<tr>
-									<td>Energia:</td>
+									<td id="texto-criatura-luta-energia">Energia:</td>
 									<td style="text-align: right;"><b id="criatura-luta-energia"></b></td>
 								</tr>
 								<tr>

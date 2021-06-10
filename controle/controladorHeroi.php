@@ -94,6 +94,17 @@ class ControladorHeroi
         $modulo->__destruct();
     }
     
+    public function alterarHeroiBlindagemSorte($post)
+    {
+        $heroi = new Heroi();
+        $heroi->setSorte($post['sorte']);
+        $heroi->setBlindagem($post['energia']);
+        $heroi->setId($post['heroi_id']);
+        
+        $modulo = new DaoHeroi();
+        $modulo->alterarHeroiBlindagemSorte($heroi);
+        $modulo->__destruct();
+    }	
     
     public function alterarHeroiEnergiaSorte($post)
     {

@@ -19,7 +19,7 @@ require_once "controle/controladorHeroi.php";
 require_once "dao/daoHeroi.php";
 require_once "classe/Heroi.php";
 
-$c = new Controlador();
+new Controlador();
 
 class Controlador {
     
