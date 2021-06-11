@@ -490,7 +490,7 @@ function fcnIniciarBatalhaModalCriatura(){
 	
 	fcnFinalizarBatalhaModal(map.get('nome'),map.get('habilidade'),map.get('energia'));
 	fcnTextoCriaturaBatalha(0);
-	limparCor();
+	fcnLimparCor();
 }
 
 function fcnIniciarBatalhaGetModalAtributo(entidade, tipoBatalha){
@@ -517,7 +517,8 @@ function fcnIniciarBatalhaModalVeiculo(){
 		
 	fcnFinalizarBatalhaModal(map.get('nome'),map.get('habilidade'),map.get('energia'));
 	fcnTextoCriaturaBatalha(1);
-	limparCor();
+	fcnLimparCor();
+	$("#btn-batalha-tiro").prop( "disabled", true );
 }
 
 function fcnGetSorteBatalha(habilidadeCriatura,habilidadeHeroi){
@@ -528,7 +529,7 @@ function fcnGetSorteBatalha(habilidadeCriatura,habilidadeHeroi){
 }
 
 function fcnBatalharAutomatica(heroiId){
-	$("#btn-batalha-criatura").prop( "disabled", true );
+	fcnBtnBatalhaDisabled(true);	
 	$("#btn-batalha-auto").prop( "disabled", true );	
 	$("#btn-test-sort").prop( "disabled", true );
 	
@@ -635,8 +636,10 @@ function fcnValidarBtnSorteAtivo(){
 	}
 }
 
-function fcnBatalhar(heroiId){
-	limparCor();	
+//Zero = Corpo a Corpo 
+//Um = Arma de Distancia, Arma de Fogo
+function fcnBatalhar(heroiId,tipoArma){
+	fcnLimparCor();	
 	wrongSound = document.getElementById("wrong-song");
 
 	var map = fcnGetStatusBatalha(false);	
@@ -644,13 +647,13 @@ function fcnBatalhar(heroiId){
 
 	$('#criatura-luta-resultado').html(mapSorte.get('sorteCriatura'));
 	$('#heroi-luta-resultado').html(mapSorte.get('sorteHeroi'));
-	$("#btn-batalha-criatura").prop( "disabled", false );
+	fcnBtnBatalhaDisabled(false);
 	
 	fcnValidarBtnSorteAtivo();
 
 	if(mapSorte.get('sorteCriatura') > mapSorte.get('sorteHeroi')){ //Criatura Ataca
 		fncEfeitoCombat(2);
-		map.set('energiaHeroi',(map.get('energiaHeroi')-2));
+		map.set('energiaHeroi',fcnCalcularAtaque(map.get('energiaHeroi'),tipoArma));
 		$('#heroi-luta-energia').addClass('text-danger');
 		$('#status-batalha').val(2);
 		
@@ -672,7 +675,7 @@ function fcnBatalhar(heroiId){
 		
 	}else if(mapSorte.get('sorteCriatura') < mapSorte.get('sorteHeroi')){ //Heroi Ataca
 		fncEfeitoCombat(1);
-		map.set('energiaCriatura',(map.get('energiaCriatura')-2));
+		map.set('energiaCriatura', fcnCalcularAtaque(map.get('energiaCriatura'),tipoArma));
 		$('#criatura-luta-energia').addClass('text-danger');		
 		$('#status-batalha').val(1);
 		$('#criatura-luta-energia').html(map.get('energiaCriatura'));
@@ -683,21 +686,32 @@ function fcnBatalhar(heroiId){
 			fcnSetTerminoTurnoBatalha(true,true,'Fim da batalha o herói venceu!',0);
 		}			
 	}else if(mapSorte.get('sorteCriatura') == mapSorte.get('sorteHeroi')){ //empate
-		limparCor();
+		fcnLimparCor();
 		$("#btn-test-sort").prop( "disabled", true );
 		wrongSound.play();		
 	}	
 
 }
 
+function fcnCalcularAtaque(energiaAtual,tipoArma){
+	energialFinal = 0;
+	if(tipoArma === 1){
+		energialFinal = (energiaAtual-(Math.floor((Math.random() * 6)+1)));
+	}else{
+		energialFinal = (energiaAtual-2);
+	} 
+	return energialFinal;
+}
+
 function fcnSetTerminoTurnoBatalha(btnBatalha,btnSorte,texto,statusBatalha){
-	$("#btn-batalha-criatura").prop( "disabled", btnBatalha );
+	fcnBtnBatalhaDisabled(btnBatalha);
+	//aqui
 	$("#btn-test-sort").prop( "disabled", btnSorte );
 	fcnCarregarModalMensagem(texto);
 	$('#status-batalha').val(statusBatalha);
 }
 
-function limparCor(){
+function fcnLimparCor(){
 	$('#heroi-luta-energia').removeClass('text-success');
 	$('#criatura-luta-energia').removeClass('text-success');
 	$('#criatura-luta-energia').removeClass('text-danger');
@@ -738,7 +752,7 @@ function fcnServerSorte(funcaoAlterar, energiaHeroi,sorteHeroi,heroiId){
 }
 
 function fcnTestarSorte(heroiId){
-	limparCor();
+	fcnLimparCor();
 	wrongSound = document.getElementById("wrong-song");
 	bellSound = document.getElementById("bell-song");
 	sorteHeroi = parseInt($('#heroi-luta-sorte').html());
@@ -756,7 +770,7 @@ function fcnTestarSorte(heroiId){
 			if(map.get('energiaCriatura') <= 0){
 				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
 				map.set('energiaCriatura',0);
-				$("#btn-batalha-criatura").prop( "disabled", true );
+				fcnBtnBatalhaDisabled(true);
 			}
 			$('#criatura-luta-energia').html(map.get('energiaCriatura'));
 			bellSound.play();
@@ -769,7 +783,7 @@ function fcnTestarSorte(heroiId){
 	}else if(statusBatalha == 2){ //Monstro Atacou
 		if(sorte <= sorteHeroi){ //BOM			
 			map.set('energiaHeroi',(map.get('energiaHeroi')+1));
-			$("#btn-batalha-criatura").prop( "disabled", false );
+			fcnBtnBatalhaDisabled(false);
 			$('#heroi-luta-energia').addClass('text-success');
 			$('#status-energia').val(map.get('energiaHeroi'));
 			$('#heroi-luta-energia').html(map.get('energiaHeroi'));
@@ -1044,10 +1058,16 @@ function fcnFinalizarBatalhaModal(nome,habilidade,energia){
 	$('#criatura-luta-energia').html(energia);
 	$('#criatura-luta-habilidade').html(habilidade);
 	
-	$("#btn-batalha-criatura").prop( "disabled", false );
+	fcnBtnBatalhaDisabled(false);
 	$("#btn-batalha-auto").prop( "disabled", false );
 	
 	$("#btn-test-sort").prop( "disabled", true );
+}
+
+function fcnBtnBatalhaDisabled(isDisabled){
+	$("#btn-batalha-criatura").prop( "disabled", isDisabled );
+	$("#btn-batalha-tiro").prop( "disabled", isDisabled );
+	$("#btn-batalha-auto").prop( "disabled", isDisabled );
 }
 
 function fcnTextoCriaturaBatalha(tipo){

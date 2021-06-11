@@ -73,8 +73,13 @@
 										<div class="btn-group" role="group" aria-label="">
 											<button type="button" id="btn-batalha-auto" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalharAutomatica(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Auto</button>
 											<button type="button" id="btn-test-sort" style="margin-top: 10px;" disabled="disabled" onclick="fcnTestarSorte(<?php echo $heroi->heroi_id; ?>)" class="btn btn-secondary">Tentar Sorte</button>
-											<button type="button" id="btn-batalha-criatura" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>)" class="btn btn-danger">Batalhar</button>
+											<button type="button" id="btn-batalha-criatura" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>,0)" class="btn btn-danger">Batalhar</button>
 										</div>
+										<?php if($heroi->aventura == 'O Guerreiro das Estradas'){  ?>	
+										<div class="btn-group" role="group" aria-label="">
+											<button type="button" id="btn-batalha-tiro" style="margin-top: 10px;" disabled="disabled" onclick="fcnBatalhar(<?php echo $heroi->heroi_id; ?>,1)" class="btn btn-danger">Batalhar com Arma de Fogo</button>
+										</div>
+										<?php } ?>
 									</td>
 								</tr>								
 							</table>
