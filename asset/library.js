@@ -91,6 +91,28 @@ function fcnCarregarModalCriarHeroi() {
 	$('#modal-manter-heroi-criar').modal('show');
 }
 
+function fcnValidaIncluirHeroi(userId,nomeCriar,habilidadeCriar,energiaCriar,sorteCriar){
+	var isInvalid = false;
+	if(userId == null || userId == undefined || userId == ''){
+		fcnCarregarModalMensagem('Não foi póssivel criar o heroi favor recarregar a pagina!');
+		isInvalid = true;
+    }else if(nomeCriar == null || nomeCriar == undefined || nomeCriar == ''){
+		fcnCarregarModalMensagem('O campo da nome deve ser preenchido!');
+		isInvalid = true;
+    } else if(habilidadeCriar == null || habilidadeCriar == undefined || habilidadeCriar == '' || habilidadeCriar <= 0){
+    	fcnCarregarModalMensagem('O campo habilidade deve ser superior a "0"!');
+    	isInvalid = true;
+    } else if(energiaCriar == null || energiaCriar == undefined || energiaCriar == '' || energiaCriar <= 0){
+    	fcnCarregarModalMensagem('O campo energia deve ser superior a "0"!');
+		isInvalid = true;
+    } else if(sorteCriar == null || sorteCriar == undefined || sorteCriar == '' || sorteCriar <= 0){
+    	fcnCarregarModalMensagem('O campo sorte deve ser superior a "0"!');
+		isInvalid = true;
+    }
+	
+	return isInvalid;
+}
+
 function fncIncluirHeroi(){
     
 	nomeCriar = $('#modal-heroi-criar-nome').val();
@@ -103,30 +125,9 @@ function fncIncluirHeroi(){
 	poderFogo = parseInt($('#modal-heroi-criar-poder-fogo').val());
 	blindagem = parseInt($('#modal-heroi-criar-blindagem').val());
 	
-	if(userId == null || userId == undefined || userId == ''){
-		fcnCarregarModalMensagem('Não foi póssivel criar o heroi favor recarregar a pagina!');
+	if(fcnValidaIncluirHeroi(userId,nomeCriar,habilidadeCriar,energiaCriar,sorteCriar)){
 		return;
-    }
-	
-	if(nomeCriar == null || nomeCriar == undefined || nomeCriar == ''){
-		fcnCarregarModalMensagem('O campo da nome deve ser preenchido!');
-		return;
-    }
-	
-	if(habilidadeCriar == null || habilidadeCriar == undefined || habilidadeCriar == '' || habilidadeCriar <= 0){
-    	fcnCarregarModalMensagem('O campo habilidade deve ser superior a "0"!');
-    	return;
-    }
-
-	if(energiaCriar == null || energiaCriar == undefined || energiaCriar == '' || energiaCriar <= 0){
-    	fcnCarregarModalMensagem('O campo energia deve ser superior a "0"!');
-		return;
-    }
-	
-	if(sorteCriar == null || sorteCriar == undefined || sorteCriar == '' || sorteCriar <= 0){
-    	fcnCarregarModalMensagem('O campo sorte deve ser superior a "0"!');
-		return;
-    }
+	}
 
 	$('#modal-manter-heroi-criar').modal('hide');
 	
@@ -171,10 +172,6 @@ function fcnDeletarModalHeroi(){
         }
     });
 }
-
-
-
-
 
 function fncAlterarHeroi(element, campo, propriedade){
     controlador = $(element).attr('controlador');
@@ -398,8 +395,8 @@ function addInventario(id, descricao, quantidade, heroi_id, tipo){
 	 $html = '';
 	 $html += '<li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border border-light"';
 		 $html += 'onclick="fcnCarregarModalInvent(this);"';
-			 $html += 'descricao="'+descricao+'"';
-			 $html += 'quantidade="'+quantidade+'"';
+		 $html += 'descricao="'+descricao+'"';
+		 $html += 'quantidade="'+quantidade+'"';
 		 $html += 'inventario-id="'+id+'"';
 		 $html += 'heroi_id="'+heroi_id+'"';
 		 $html += 'id="inventario-'+id+'">';
@@ -484,88 +481,75 @@ function fcnCarregarModalIncluirVeiculoInimigo(heroi_id){
 }
 
 function fcnIniciarBatalhaModalCriatura(){
-	nome = $('#modal-criatura-nome').val();
-	habilidade = $('#modal-criatura-habilidade').val();
-	energia = $('#modal-criatura-energia').val();
-	
-	if(nome == '' || nome == null || nome == undefined){
-		fcnCarregarModalMensagem('O campo nome deve ser preenchido!');
-		return;
-	}
-	
-	if(habilidade == '' || habilidade == null || habilidade == undefined || parseInt(habilidade) <= 0){
-		fcnCarregarModalMensagem('A habilidade deve ser superior a 0!');
-		return;
-	}
-	
-	if(energia == '' || energia == null || energia == undefined || parseInt(energia) <= 0){
-		fcnCarregarModalMensagem('A energia deve ser superior a 0!');
-		return;
-	}	
-	
-	heroi_id = $('#modal-criatura-heroi_id').val();
-	$('#modal-manter-criatura').modal('hide');
-	$('#criatura-luta-resultado').html('-');
-	$('#heroi-luta-resultado').html('-');
-	$('#status-batalha').val(0);
-	$('#tipo-batalha').val(0);
+
+	var map = fcnIniciarBatalhaGetModalAtributo('criatura',0);	
+	fcnValidarBatalhaModal(map.get('nome'),map.get('habilidade'),map.get('energia'));
 	
 	$('#heroi-luta-energia').html($('#status-energia-inicial').html());
     $('#heroi-luta-habilidade').html($('#status-habilidade-inicial').html());	
 	
-	$('#criatura-luta-nome').html(nome);
-	$('#criatura-luta-energia').html(energia);
-	$('#criatura-luta-habilidade').html(habilidade);
-	
-	$("#btn-batalha-criatura").prop( "disabled", false );
-	$("#btn-batalha-auto").prop( "disabled", false );
-	
-	$("#btn-test-sort").prop( "disabled", true );
+	fcnFinalizarBatalhaModal(map.get('nome'),map.get('habilidade'),map.get('energia'));
 	fcnTextoCriaturaBatalha(0);
 	limparCor();
+}
+
+function fcnIniciarBatalhaGetModalAtributo(entidade, tipoBatalha){
+	var map = new Map();	
+	map.set('nome',$('#modal-' + entidade + '-nome').val());
+	map.set('habilidade',$('#modal-' + entidade + '-habilidade').val());
+	map.set('energia',$('#modal-' + entidade + '-energia').val());
+	//map.set('heroi_id',$('#modal-' + entidade + '-heroi_id').val());
+	$('#modal-manter-' + entidade).modal('hide');
+	$('#' + entidade + '-luta-resultado').html('-');
+	$('#heroi-luta-resultado').html('-');
+	$('#status-batalha').val(0);
+	$('#tipo-batalha').val(tipoBatalha);	
+	return map;
+}
+
+function fcnIniciarBatalhaModalVeiculo(){
+	
+	var map = fcnIniciarBatalhaGetModalAtributo('veiculo', 1);	
+	fcnValidarBatalhaModal(map.get('nome'),map.get('habilidade'),map.get('energia'));
+	
+	$('#heroi-luta-energia').html($('#status-blindagem').val());
+    $('#heroi-luta-habilidade').html($('#status-poder-fogo').val());	
+		
+	fcnFinalizarBatalhaModal(map.get('nome'),map.get('habilidade'),map.get('energia'));
+	fcnTextoCriaturaBatalha(1);
+	limparCor();
+}
+
+function fcnGetSorteBatalha(habilidadeCriatura,habilidadeHeroi){
+	var map = new Map();	
+	map.set('sorteCriatura',Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura);
+	map.set('sorteHeroi',Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi);
+	return map;
 }
 
 function fcnBatalharAutomatica(heroiId){
 	$("#btn-batalha-criatura").prop( "disabled", true );
 	$("#btn-batalha-auto").prop( "disabled", true );	
 	$("#btn-test-sort").prop( "disabled", true );
-
-	swordSound = document.getElementById("sword-song");
-	wrongSound = document.getElementById("wrong-song");
 	
-	tipoBatalha = parseInt($('#tipo-batalha').val());
-	
-	if(tipoBatalha === 1){
-		energiaHeroi = parseInt($('#status-blindagem').val());
-		energiaCriatura = parseInt($('#criatura-luta-energia').html());
+	var map = fcnGetStatusBatalha(false);
 		
-		habilidadeHeroi = parseInt($('#status-poder-fogo').val());
-		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());			
-	}else{
-		energiaHeroi = parseInt($('#heroi-luta-energia').html());
-		energiaCriatura = parseInt($('#criatura-luta-energia').html());
-		
-		habilidadeHeroi = parseInt($('#heroi-luta-habilidade').html());
-		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());			
-	}
+	while(map.get('energiaHeroi') > 0 && map.get('energiaCriatura') > 0){
 
-	while(energiaHeroi > 0 && energiaCriatura > 0){
-
-		sorteCriatura = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura;
-		sorteHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi;
+		var mapSorte = fcnGetSorteBatalha(map.get('habilidadeCriatura'),map.get('habilidadeHeroi'));
 		
-		if(sorteCriatura > sorteHeroi){ //Criatura Ataca
-			energiaHeroi = energiaHeroi-2;
-			if(energiaHeroi <= 0){
-				energiaHeroi = 0;
+		if(mapSorte.get('sorteCriatura') > mapSorte.get('sorteHeroi')){ //Criatura Ataca
+			map.set('energiaHeroi',(map.get('energiaHeroi')-2));
+			if(map.get('energiaHeroi') <= 0){
+				map.set('energiaHeroi',0);
 				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
 				fncEfeitoCombat(2);
 				break;
 			}
-		}else if(sorteCriatura < sorteHeroi){ //Heroi Ataca
-			energiaCriatura = energiaCriatura-2;
-			if(energiaCriatura <= 0 ){
-				energiaCriatura = 0;
+		}else if(mapSorte.get('sorteCriatura') < mapSorte.get('sorteHeroi')){ //Heroi Ataca			
+			map.set('energiaCriatura',(map.get('energiaCriatura')-2));
+			if(map.get('energiaCriatura') <= 0 ){
+				map.set('energiaCriatura',0);
 				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
 				fncEfeitoCombat(1);
 				break;
@@ -573,39 +557,24 @@ function fcnBatalharAutomatica(heroiId){
 		}		
 	}
 
-	if(tipoBatalha === 1){
-		$('#status-batalha').val(0);
-		$('#status-blindagem').val(energiaHeroi);
-		$('#heroi-luta-energia').html(energiaHeroi);
-		$('#criatura-luta-energia').html(0);
-		
-		$.ajax({
-			url: 'controlador.php',
-			type: 'POST',
-			data: 'controlador=ControladorHeroi&funcao=alterarHeroiBlindagem&valor=' + energiaHeroi + '&heroi_id='+heroiId,
-			success: function(result) {},
-			beforeSend: function() {},
-			complete: function() {},
-			error: function (request, status, error) {}
-		});
+	$('#status-batalha').val(0);
+	$(map.get('campoStatus')).val(map.get('energiaHeroi'));
+	$('#heroi-luta-energia').html(map.get('energiaHeroi'));
+	$('#criatura-luta-energia').html(0);	
+	fcnServerBatalha(map.get('funcaoAlterar'),map.get('energiaHeroi'), heroiId);
 
-	}else{
-		$('#status-batalha').val(0);
-		$('#status-energia').val(energiaHeroi);
-		$('#heroi-luta-energia').html(energiaHeroi);
-		$('#criatura-luta-energia').html(0);
-		
-		$.ajax({
-			url: 'controlador.php',
-			type: 'POST',
-			data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergia&valor=' + energiaHeroi + '&heroi_id='+heroiId,
-			success: function(result) {},
-			beforeSend: function() {},
-			complete: function() {},
-			error: function (request, status, error) {}
-		});
-	}
-	
+}
+
+function fcnServerBatalha(funcaoAlterar,energiaHeroi, heroiId){
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'controlador=ControladorHeroi&funcao=' + funcaoAlterar + '&valor=' + energiaHeroi + '&heroi_id='+heroiId,
+		success: function(result) {},
+		beforeSend: function() {},
+		complete: function() {},
+		error: function (request, status, error) {}
+	});
 }
 
 function sleep(milliseconds) {
@@ -616,163 +585,116 @@ function sleep(milliseconds) {
 	} while (currentDate - date < milliseconds);
 }
 
-function fcnBatalhar(heroiId){
-	limparCor();
-	swordSound = document.getElementById("sword-song");
-	wrongSound = document.getElementById("wrong-song");
-
+function fcnGetStatusBatalha(isSorte){
+	var map = new Map();
+	
 	tipoBatalha = parseInt($('#tipo-batalha').val());
 	
+	var textSorte = (isSorte === true)?'Sorte':'';
+	
 	if(tipoBatalha === 1){
+		
 		energiaHeroi = parseInt($('#status-blindagem').val());
 		energiaCriatura = parseInt($('#criatura-luta-energia').html());
-		
 		habilidadeHeroi = parseInt($('#status-poder-fogo').val());
-		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());			
+		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());
+		funcaoAlterar = 'alterarHeroiBlindagem';
+		campoStatus = '#status-blindagem';
+		
+		map.set('energiaHeroi',energiaHeroi);
+		map.set('energiaCriatura',energiaCriatura);
+		map.set('habilidadeHeroi',habilidadeHeroi);
+		map.set('habilidadeCriatura',habilidadeCriatura);
+		map.set('funcaoAlterar','alterarHeroiBlindagem'+textSorte);
+		map.set('campoStatus','#status-blindagem');
+		
 	}else{
 		energiaHeroi = parseInt($('#heroi-luta-energia').html());
-		energiaCriatura = parseInt($('#criatura-luta-energia').html());
-		
+		energiaCriatura = parseInt($('#criatura-luta-energia').html());		
 		habilidadeHeroi = parseInt($('#heroi-luta-habilidade').html());
-		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());			
+		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());	
+		funcaoAlterar = 'alterarHeroiEnergia';
+		campoStatus = '#status-energia';
+
+		map.set('energiaHeroi',energiaHeroi);
+		map.set('energiaCriatura',energiaCriatura);
+		map.set('habilidadeHeroi',habilidadeHeroi);
+		map.set('habilidadeCriatura',habilidadeCriatura);
+		map.set('funcaoAlterar','alterarHeroiEnergia'+textSorte);
+		map.set('campoStatus','#status-energia');		
 	}
 	
-	sorteCriatura = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeCriatura;
-	sorteHeroi = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1) + habilidadeHeroi;
+	return map;
+	
+}
 
-	$('#criatura-luta-resultado').html(sorteCriatura);
-	$('#heroi-luta-resultado').html(sorteHeroi);
+function fcnValidarBtnSorteAtivo(){
+	sorteBatalhaHeroi = $('#heroi-luta-sorte').html();
+	if(sorteBatalhaHeroi >= 1){
+		$("#btn-test-sort").prop( "disabled", false );
+	}
+}
 
+function fcnBatalhar(heroiId){
+	limparCor();	
+	wrongSound = document.getElementById("wrong-song");
+
+	var map = fcnGetStatusBatalha(false);	
+	var mapSorte = fcnGetSorteBatalha(map.get('habilidadeCriatura'),map.get('habilidadeHeroi'));
+
+	$('#criatura-luta-resultado').html(mapSorte.get('sorteCriatura'));
+	$('#heroi-luta-resultado').html(mapSorte.get('sorteHeroi'));
 	$("#btn-batalha-criatura").prop( "disabled", false );
-	$("#btn-test-sort").prop( "disabled", false );
 	
-	if(tipoBatalha === 1){	
-		
-		//Batalha com Veiculo
-		if(sorteCriatura > sorteHeroi){ //Criatura Ataca
-			fncEfeitoCombat(2);
-			energiaHeroi = energiaHeroi-2;
-			$('#heroi-luta-energia').addClass('text-danger');
-			$('#status-batalha').val(2);
-			
-			sorteHeroi = parseInt($('#heroi-luta-sorte').html());
-			
-			$.ajax({
-				url: 'controlador.php',
-				type: 'POST',
-				data: 'controlador=ControladorHeroi&funcao=alterarHeroiBlindagem&valor=' + energiaHeroi + '&heroi_id='+heroiId,
-				success: function(result) {},
-				beforeSend: function() {},
-				complete: function() {},
-				error: function (request, status, error) {}
-			});
-            
-			if(energiaHeroi < 0){
-				energiaHeroi = 0;
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", true );
-				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
-				$('#status-batalha').val(0);
-			}else if(energiaHeroi == 0 && sorteHeroi > 0){
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", false );
-				fcnCarregarModalMensagem('Tente a sorte!');
-				$('#status-batalha').val(2);
-			}else if(energiaHeroi == 0 && sorteHeroi <= 0){
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", true );
-				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
-				$('#status-batalha').val(0);
-			}
-			
-			$('#status-blindagem').val(energiaHeroi);
-			$('#heroi-luta-energia').html(energiaHeroi);
-			
-		}else if(sorteCriatura < sorteHeroi){ //Heroi Ataca
-			fncEfeitoCombat(1);
-			energiaCriatura = energiaCriatura-2;
-			$('#criatura-luta-energia').addClass('text-danger');		
-			$('#criatura-luta-energia').html(energiaCriatura);
-			$('#status-batalha').val(1);
-			
-			if(energiaCriatura <= 0 ){
-				energiaCriatura = 0;
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", true );
-				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
-				$('#status-batalha').val(0);
-				$('#criatura-luta-energia').html(0);
-			}			
-		}else if(sorteCriatura == sorteHeroi){ //empate
-			limparCor();
-			$("#btn-test-sort").prop( "disabled", true );
-			wrongSound.play();		
-		}			
-		
-	}else{
-		
-		//Batalha Corpo a Corpo
-		if(sorteCriatura > sorteHeroi){ //Criatura Ataca
-			fncEfeitoCombat(2);
-			energiaHeroi = energiaHeroi-2;
-			$('#heroi-luta-energia').addClass('text-danger');
-			$('#status-batalha').val(2);
-			
-			sorteHeroi = parseInt($('#heroi-luta-sorte').html());
-			
-			$.ajax({
-				url: 'controlador.php',
-				type: 'POST',
-				data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergia&valor=' + energiaHeroi + '&heroi_id='+heroiId,
-				success: function(result) {},
-				beforeSend: function() {},
-				complete: function() {},
-				error: function (request, status, error) {}
-			});
+	fcnValidarBtnSorteAtivo();
 
-			if(energiaHeroi < 0){
-				energiaHeroi = 0;
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", true );
-				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
-				$('#status-batalha').val(0);
-			}else if(energiaHeroi == 0 && sorteHeroi > 0){
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", false );
-				fcnCarregarModalMensagem('Tente a sorte!');
-				$('#status-batalha').val(2);
-			}else if(energiaHeroi == 0 && sorteHeroi <= 0){
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", true );
-				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
-				$('#status-batalha').val(0);
-			}
-			
-			$('#status-energia').val(energiaHeroi);
-			$('#heroi-luta-energia').html(energiaHeroi);
-			
-		}else if(sorteCriatura < sorteHeroi){ //Heroi Ataca
-			fncEfeitoCombat(1);
-			energiaCriatura = energiaCriatura-2;
-			$('#criatura-luta-energia').addClass('text-danger');		
-			$('#criatura-luta-energia').html(energiaCriatura);
-			$('#status-batalha').val(1);
-			
-			if(energiaCriatura <= 0 ){
-				energiaCriatura = 0;
-				$("#btn-batalha-criatura").prop( "disabled", true );
-				$("#btn-test-sort").prop( "disabled", true );
-				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
-				$('#status-batalha').val(0);
-				$('#criatura-luta-energia').html(0);
-			}			
-		}else if(sorteCriatura == sorteHeroi){ //empate
-			limparCor();
-			$("#btn-test-sort").prop( "disabled", true );
-			wrongSound.play();		
-		}		
-	}
-			
+	if(mapSorte.get('sorteCriatura') > mapSorte.get('sorteHeroi')){ //Criatura Ataca
+		fncEfeitoCombat(2);
+		map.set('energiaHeroi',(map.get('energiaHeroi')-2));
+		$('#heroi-luta-energia').addClass('text-danger');
+		$('#status-batalha').val(2);
+		
+		mapSorte.set('sorteHeroi',parseInt($('#heroi-luta-sorte').html()));
+		
+		fcnServerBatalha(map.get('funcaoAlterar'),map.get('energiaHeroi'), heroiId);
+		
+		if(map.get('energiaHeroi') < 0){
+			map.set('energiaHeroi',0);
+			fcnSetTerminoTurnoBatalha(true,true,'Fim da batalha o herói morreu!',0);
+		}else if(map.get('energiaHeroi') == 0 && mapSorte.get('sorteHeroi') > 0){
+			fcnSetTerminoTurnoBatalha(true,false,'Tente a sorte!',2);
+		}else if(map.get('energiaHeroi') == 0 && mapSorte.get('sorteHeroi') <= 0){
+			fcnSetTerminoTurnoBatalha(true,true,'Fim da batalha o herói morreu!',0);
+		}
+		
+		$(map.get('campoStatus')).val(map.get('energiaHeroi'));
+		$('#heroi-luta-energia').html(map.get('energiaHeroi'));
+		
+	}else if(mapSorte.get('sorteCriatura') < mapSorte.get('sorteHeroi')){ //Heroi Ataca
+		fncEfeitoCombat(1);
+		map.set('energiaCriatura',(map.get('energiaCriatura')-2));
+		$('#criatura-luta-energia').addClass('text-danger');		
+		$('#status-batalha').val(1);
+		$('#criatura-luta-energia').html(map.get('energiaCriatura'));
+		
+		if(map.get('energiaCriatura') <= 0 ){
+			map.set('energiaCriatura',0);
+			$('#criatura-luta-energia').html(0);
+			fcnSetTerminoTurnoBatalha(true,true,'Fim da batalha o herói venceu!',0);
+		}			
+	}else if(mapSorte.get('sorteCriatura') == mapSorte.get('sorteHeroi')){ //empate
+		limparCor();
+		$("#btn-test-sort").prop( "disabled", true );
+		wrongSound.play();		
+	}	
+
+}
+
+function fcnSetTerminoTurnoBatalha(btnBatalha,btnSorte,texto,statusBatalha){
+	$("#btn-batalha-criatura").prop( "disabled", btnBatalha );
+	$("#btn-test-sort").prop( "disabled", btnSorte );
+	fcnCarregarModalMensagem(texto);
+	$('#status-batalha').val(statusBatalha);
 }
 
 function limparCor(){
@@ -783,9 +705,9 @@ function limparCor(){
 }
 
 function fcnTestarSorteSimples(heroiId,sorteDados){
-	sorteHeroi = parseInt($('#status-sorte').val());
 	wrongSound = document.getElementById("wrong-song");
 	bellSound = document.getElementById("bell-song");
+	sorteHeroi = parseInt($('#status-sorte').val());
 	energiaHeroi = parseInt($('#status-energia').val());
 	
 	if(sorteHeroi > 0){
@@ -799,163 +721,79 @@ function fcnTestarSorteSimples(heroiId,sorteDados){
 		sorteHeroi = sorteHeroi - 1;
 		$('#status-sorte').val(sorteHeroi);
 		$('#heroi-luta-sorte').html(sorteHeroi);
-		
-		
-		$.ajax({
-	        url: 'controlador.php',
-	        type: 'POST',
-	        data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergiaSorte&energia=' + energiaHeroi + '&sorte=' + sorteHeroi + '&heroi_id='+heroiId,
-	        success: function(result) {},
-	        beforeSend: function() {},
-	        complete: function() {},
-	        error: function (request, status, error) {}
-	    });	
-		
-		
+		fcnServerSorte('alterarHeroiEnergiaSorte', energiaHeroi,sorteHeroi,heroiId);		
 	}
+}
+
+function fcnServerSorte(funcaoAlterar, energiaHeroi,sorteHeroi,heroiId){
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'controlador=ControladorHeroi&funcao=' + funcaoAlterar + '&energia=' + energiaHeroi + '&sorte=' + sorteHeroi + '&heroi_id='+heroiId,
+		success: function(result) {},
+		beforeSend: function() {},
+		complete: function() {},
+		error: function (request, status, error) {}
+	});	
 }
 
 function fcnTestarSorte(heroiId){
 	limparCor();
 	wrongSound = document.getElementById("wrong-song");
 	bellSound = document.getElementById("bell-song");
-	//energiaHeroi = parseInt($('#heroi-luta-energia').html());
-	//energiaCriatura = parseInt($('#criatura-luta-energia').html());
 	sorteHeroi = parseInt($('#heroi-luta-sorte').html());
 	statusBatalha = $('#status-batalha').val();
 	sorte = Math.floor((Math.random() * 6)+1) + Math.floor((Math.random() * 6)+1);
-
-	tipoBatalha = parseInt($('#tipo-batalha').val());
-
-	if(tipoBatalha === 1){
-		energiaHeroi = parseInt($('#status-blindagem').val());
-		energiaCriatura = parseInt($('#criatura-luta-energia').html());
-		
-		habilidadeHeroi = parseInt($('#status-poder-fogo').val());
-		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());			
-	}else{
-		energiaHeroi = parseInt($('#heroi-luta-energia').html());
-		energiaCriatura = parseInt($('#criatura-luta-energia').html());
-		
-		habilidadeHeroi = parseInt($('#heroi-luta-habilidade').html());
-		habilidadeCriatura = parseInt($('#criatura-luta-habilidade').html());			
-	}
-
+	var map = fcnGetStatusBatalha(false);
 
 	$('#criatura-luta-resultado').html('-');
 	$('#heroi-luta-resultado').html(sorte);
 	
-	if(tipoBatalha === 1){
-		//Veiculo
-		if(statusBatalha == 1){ //Heroi Atacou
-			if(sorte <= sorteHeroi){ //BOM
-				$('#criatura-luta-energia').addClass('text-danger');
-				energiaCriatura = energiaCriatura-1;
-				if(energiaCriatura <= 0){
-					fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
-					energiaCriatura = 0;
-					$("#btn-batalha-criatura").prop( "disabled", true );
-				}
-				$('#criatura-luta-energia').html(energiaCriatura);
-				bellSound.play();
-			}else{ //RUIM
-				$('#criatura-luta-energia').addClass('text-success');
-				energiaCriatura = energiaCriatura+1;		
-				$('#criatura-luta-energia').html(energiaCriatura);
-				wrongSound.play();
+	if(statusBatalha == 1){ //Heroi Atacou
+		if(sorte <= sorteHeroi){ //BOM
+			$('#criatura-luta-energia').addClass('text-danger');
+			map.set('energiaCriatura',(map.get('energiaCriatura')-1));
+			if(map.get('energiaCriatura') <= 0){
+				fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
+				map.set('energiaCriatura',0);
+				$("#btn-batalha-criatura").prop( "disabled", true );
 			}
-		}else if(statusBatalha == 2){ //Monstro Atacou
-			if(sorte <= sorteHeroi){ //BOM
-				energiaHeroi = energiaHeroi+1;
-				$("#btn-batalha-criatura").prop( "disabled", false );
-				$('#heroi-luta-energia').addClass('text-success');
-				$('#status-energia').val(energiaHeroi);
-				$('#heroi-luta-energia').html(energiaHeroi);
-				bellSound.play();
-			}else{ //RUIM
-				$('#heroi-luta-energia').addClass('text-danger');
-				energiaHeroi = energiaHeroi-1;
-				if(energiaHeroi <= 0){
-					fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
-					energiaHeroi = 0;
-				}			
-				$('#status-blindagem').val(energiaHeroi);
-				$('#heroi-luta-energia').html(energiaHeroi);
-				wrongSound.play();
-			}
+			$('#criatura-luta-energia').html(map.get('energiaCriatura'));
+			bellSound.play();
+		}else{ //RUIM
+			$('#criatura-luta-energia').addClass('text-success');
+			map.set('energiaCriatura',(map.get('energiaCriatura')+1));		
+			$('#criatura-luta-energia').html(map.get('energiaCriatura'));
+			wrongSound.play();
 		}
-		
-		sorteHeroi = sorteHeroi-1;
-		$('#heroi-luta-sorte').html(sorteHeroi);
-		$('#status-sorte').val(sorteHeroi);
-		$('#status-batalha').val(0);
-		$("#btn-test-sort").prop( "disabled", true );
-		$.ajax({
-			url: 'controlador.php',
-			type: 'POST',
-			data: 'controlador=ControladorHeroi&funcao=alterarHeroiBlindagemSorte&energia=' + energiaHeroi + '&sorte=' + sorteHeroi + '&heroi_id='+heroiId,
-			success: function(result) {},
-			beforeSend: function() {},
-			complete: function() {},
-			error: function (request, status, error) {}
-		});	
-		
-	}else{
-		// corpo a corpo
-		if(statusBatalha == 1){ //Heroi Atacou
-			if(sorte <= sorteHeroi){ //BOM
-				$('#criatura-luta-energia').addClass('text-danger');
-				energiaCriatura = energiaCriatura-1;
-				if(energiaCriatura <= 0){
-					fcnCarregarModalMensagem('Fim da batalha o herói venceu!');
-					energiaCriatura = 0;
-					$("#btn-batalha-criatura").prop( "disabled", true );
-				}
-				$('#criatura-luta-energia').html(energiaCriatura);
-				bellSound.play();
-			}else{ //RUIM
-				$('#criatura-luta-energia').addClass('text-success');
-				energiaCriatura = energiaCriatura+1;		
-				$('#criatura-luta-energia').html(energiaCriatura);
-				wrongSound.play();
-			}
-		}else if(statusBatalha == 2){ //Monstro Atacou
-			if(sorte <= sorteHeroi){ //BOM
-				energiaHeroi = energiaHeroi+1;
-				$("#btn-batalha-criatura").prop( "disabled", false );
-				$('#heroi-luta-energia').addClass('text-success');
-				$('#status-energia').val(energiaHeroi);
-				$('#heroi-luta-energia').html(energiaHeroi);
-				bellSound.play();
-			}else{ //RUIM
-				$('#heroi-luta-energia').addClass('text-danger');
-				energiaHeroi = energiaHeroi-1;
-				if(energiaHeroi <= 0){
-					fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
-					energiaHeroi = 0;
-				}			
-				$('#status-energia').val(energiaHeroi);
-				$('#heroi-luta-energia').html(energiaHeroi);
-				wrongSound.play();
-			}
+	}else if(statusBatalha == 2){ //Monstro Atacou
+		if(sorte <= sorteHeroi){ //BOM			
+			map.set('energiaHeroi',(map.get('energiaHeroi')+1));
+			$("#btn-batalha-criatura").prop( "disabled", false );
+			$('#heroi-luta-energia').addClass('text-success');
+			$('#status-energia').val(map.get('energiaHeroi'));
+			$('#heroi-luta-energia').html(map.get('energiaHeroi'));
+			bellSound.play();
+		}else{ //RUIM
+			$('#heroi-luta-energia').addClass('text-danger');
+			map.set('energiaHeroi',(map.get('energiaHeroi')-1));
+			if(map.get('energiaHeroi') <= 0){
+				fcnCarregarModalMensagem('Fim da batalha o herói morreu!');
+				map.set('energiaHeroi',0);
+			}			
+			$('#heroi-luta-energia').html(map.get('energiaHeroi'));
+			wrongSound.play();
+			$(map.get('campoStatus')).val(map.get('energiaHeroi'));
 		}
-		
-		sorteHeroi = sorteHeroi-1;
-		$('#heroi-luta-sorte').html(sorteHeroi);
-		$('#status-sorte').val(sorteHeroi);
-		$('#status-batalha').val(0);
-		$("#btn-test-sort").prop( "disabled", true );
-		$.ajax({
-			url: 'controlador.php',
-			type: 'POST',
-			data: 'controlador=ControladorHeroi&funcao=alterarHeroiEnergiaSorte&energia=' + energiaHeroi + '&sorte=' + sorteHeroi + '&heroi_id='+heroiId,
-			success: function(result) {},
-			beforeSend: function() {},
-			complete: function() {},
-			error: function (request, status, error) {}
-		});			
-	}	
-
+	}
+	
+	sorteHeroi = sorteHeroi-1;
+	$('#heroi-luta-sorte').html(sorteHeroi);
+	$('#status-sorte').val(sorteHeroi);
+	$('#status-batalha').val(0);
+	$("#btn-test-sort").prop( "disabled", true );
+	fcnServerSorte(map.get('funcaoAlterar'), map.get('energiaHeroi'),sorteHeroi,heroiId);
+	
 }
 
 function fncAlterarEnergiaCriatura(id, campo, propriedade){
@@ -1067,7 +905,7 @@ function fncEfeitoCombat(isHero){
 
 function fncMoveActionCombatMobile(hero, monster,isHero){
 	swordSound = document.getElementById("sword-song");
-	wrongSound = document.getElementById("wrong-song");
+	//wrongSound = document.getElementById("wrong-song");
 	
 	if(isHero == 1){
 		$('#hero-art').animate({
@@ -1134,8 +972,7 @@ function fncMoveActionCombatMobile(hero, monster,isHero){
 }
 
 function fncMoveActionCombat(hero, monster,isHero){
-	swordSound = document.getElementById("sword-song");
-	wrongSound = document.getElementById("wrong-song");
+	swordSound = document.getElementById("sword-song");	
 	
 	$('#hero-art').animate({
 	  left: hero+'px',
@@ -1185,11 +1022,7 @@ function fncMoveActionCombat(hero, monster,isHero){
 
 }
 
-function fcnIniciarBatalhaModalVeiculo(){
-	nome = $('#modal-veiculo-nome').val();
-	habilidade = $('#modal-veiculo-habilidade').val();
-	energia = $('#modal-veiculo-energia').val();
-	
+function fcnValidarBatalhaModal(nome,habilidade,energia){
 	if(nome == '' || nome == null || nome == undefined){
 		fcnCarregarModalMensagem('O campo nome deve ser preenchido!');
 		return;
@@ -1203,19 +1036,10 @@ function fcnIniciarBatalhaModalVeiculo(){
 	if(energia == '' || energia == null || energia == undefined || parseInt(energia) <= 0){
 		fcnCarregarModalMensagem('A energia deve ser superior a 0!');
 		return;
-	}	
-	
-	heroi_id = $('#modal-veiculo-heroi_id').val();
-	$('#modal-manter-veiculo').modal('hide');
-	$('#veiculo-luta-resultado').html('-');
-	$('#heroi-luta-resultado').html('-');
-	$('#status-batalha').val(0);
-	$('#tipo-batalha').val(1);
-	
-	$('#heroi-luta-energia').html($('#status-blindagem').val());
-    $('#heroi-luta-habilidade').html($('#status-poder-fogo').val());	
-	
-	
+	}		
+}
+
+function fcnFinalizarBatalhaModal(nome,habilidade,energia){
 	$('#criatura-luta-nome').html(nome);
 	$('#criatura-luta-energia').html(energia);
 	$('#criatura-luta-habilidade').html(habilidade);
@@ -1224,8 +1048,6 @@ function fcnIniciarBatalhaModalVeiculo(){
 	$("#btn-batalha-auto").prop( "disabled", false );
 	
 	$("#btn-test-sort").prop( "disabled", true );
-	fcnTextoCriaturaBatalha(1);
-	limparCor();
 }
 
 function fcnTextoCriaturaBatalha(tipo){
