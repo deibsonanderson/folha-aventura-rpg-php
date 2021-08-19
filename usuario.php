@@ -1,5 +1,6 @@
 <?php 
 session_start();
+error_reporting(E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
 unset($_SESSION["login"]);
 error_reporting (E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
 
@@ -34,8 +35,9 @@ if(isset($_POST["inputEmail"]) && isset($_POST["inputPassword"])  &&  $_POST["in
         }else{
             $sql = "INSERT INTO `tb_aventura_user` (email,password) VALUES ('".$email."','".$password."')";
             $query = mysqli_query($conexao,$sql) or die('erro nos carregar login');
-            echo '<script>alert("Usuário cadastrado com sucesso");</script>';
-            header('Location: index.php');
+            echo '<script>alert("Usuário cadastrado com sucesso");
+			window.location.href = "http://dicaseprogramacao.com.br/aventura/index.php";
+			</script>';            
         }
     }
 }
