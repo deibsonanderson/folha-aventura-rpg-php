@@ -221,6 +221,7 @@ function fncIncluirRotaHeroiTreeViewPai(id, rota, isExcluir){
     }else{
     	$("#btn-pai-status-rota").prop( "disabled", true );
     }
+	$('#status-rota').focus();
 }
 
 function fcnCarregarModalRotaTreeView(heroiId) {
@@ -305,7 +306,7 @@ function fcnDeletarModalRota(){
 function fcnCarregarModalInventExluir(id) {
 	$('#modal-inventario-id').val($('#modal-invent-id').val());
 	$('#modal-manter-invent').modal('hide');
-	$('#modal-excluir-inventario').modal('show');	
+	$('#modal-excluir-inventario').modal('show');
 }
 
 
@@ -315,6 +316,7 @@ function fcnCarregarModalInvent(element) {
 	$('#modal-invent-quantidade').val($(element).attr('quantidade'));
 	$('#modal-invent-tipo').val($(element).attr('tipo'));
 	$('#modal-manter-invent').modal('show');
+	$('#btn-excluir-invent').prop("disabled", false);
 }
 
 function fcnCarregarModalIncluirInvent(tipo,heroi_id){
@@ -323,6 +325,7 @@ function fcnCarregarModalIncluirInvent(tipo,heroi_id){
 	$('#modal-invent-tipo').val(tipo);
 	$('#modal-invent-heroi_id').val(heroi_id);
 	$('#modal-manter-invent').modal('show');
+	$('#btn-excluir-invent').prop("disabled", true);
 }
 
 function fncAlterarNumber(campo, propriedade, max){
@@ -375,6 +378,7 @@ function fcnAtualizarModalInvent() {
         success: function(result) {
         	 if(funcao == 'incluirInventario'){
         		 addInventario(parseInt(result), descricao, quantidade, heroi_id, tipo );
+				 updateTotalListGroup(tipo, true);
         	 }else{
             	 $('#inventario-'+id).attr('descricao',descricao);
         		 $('#inventario-'+id).attr('quantidade',quantidade);
@@ -391,12 +395,35 @@ function fcnAtualizarModalInvent() {
 	
 }
 
+function updateTotalListGroup(tipo, isAdd){
+	var elements = ['#total-group-ouro','#total-group-provicao','#total-group-equipamento','#total-group-bonus','#total-group-pista','#total-group-magias','#total-group-pericias']		
+	elements.forEach((element, index) => {
+	  if(tipo == (index+1)){
+		  valor = $(element).html();
+		  if(isAdd == true){
+			  if(valor == undefined || valor == ""){
+				$(element).html(1);
+			  }else{
+				  $(element).html(parseInt(valor)+1);
+			  }
+		  }else{
+			if(valor == 1){
+				$(element).html("");
+			  }else{
+				$(element).html(parseInt(valor)-1);
+			  }  
+		  }
+	  }
+	});
+}
+
 function addInventario(id, descricao, quantidade, heroi_id, tipo){
 	 $html = '';
 	 $html += '<li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border border-light"';
 		 $html += 'onclick="fcnCarregarModalInvent(this);"';
 		 $html += 'descricao="'+descricao+'"';
 		 $html += 'quantidade="'+quantidade+'"';
+		 $html += 'tipo="'+tipo+'"';
 		 $html += 'inventario-id="'+id+'"';
 		 $html += 'heroi_id="'+heroi_id+'"';
 		 $html += 'id="inventario-'+id+'">';
@@ -442,6 +469,8 @@ function fcnDeletarModalInvent(id) {
 	        	 $('#inventario-'+id).fadeOut( "slow", function() {
 	        		 $('#inventario-'+id).remove();
 	        	 });
+				tipo = $('#modal-invent-tipo').val();
+				updateTotalListGroup(tipo, false);	
 	    	},
 	        beforeSend: function() {},
 	        complete: function() {},

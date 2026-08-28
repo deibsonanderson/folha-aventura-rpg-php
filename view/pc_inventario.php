@@ -20,6 +20,7 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 				descricao="<?php echo $inventario->descricao; ?>"
 				quantidade="<?php echo $inventario->quantidade; ?>"
 				inventario-id="<?php echo $inventario->id; ?>"
+				tipo="<?php echo $tipo; ?>"
 				heroi_id="<?php echo $heroi_id; ?>"
 				id="inventario-<?php echo $inventario->id; ?>">
 				<span id="inventario-span-desc-<?php echo $inventario->id; ?>" ><?php echo $inventario->descricao; ?></span>
@@ -30,6 +31,18 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
         }
 	}    
 }
+
+function totalIventario($inventarios, $tipo, $heroi_id){
+    $total = 0;
+	if ($inventarios != null && count($inventarios) > 0 ) {
+        foreach ($inventarios as $inventario) {
+            if($inventario->tipo == $tipo){ 
+				$total++;
+			} 
+        }
+	}
+	return ($total == 0)?'':$total;	
+}
 ?>
 <div class="" id="inventory" role="tabpanel"
 	aria-labelledby="inventory-tab">
@@ -39,26 +52,33 @@ function carregarIventario($inventarios, $tipo, $heroi_id){
 				<div class="col-3">
 					<div class="nav flex-column nav-pills" id="v-pills-tab"
 						role="tablist" aria-orientation="vertical">
-						<a class="nav-link active" id="v-pills-ouro-tab" data-toggle="pill" href="#v-pills-ouro" role="tab" aria-controls="v-pills-ouro" aria-selected="true" >
-							<img alt="" src="image/Icons8_78.png" style="width: 30px;"> 
+						<a class="nav-link active d-flex" id="v-pills-ouro-tab" data-toggle="pill" href="#v-pills-ouro" role="tab" aria-controls="v-pills-ouro" aria-selected="true" >
+							<img alt="" src="image/Icons8_78.png" style="width: 30px;">&nbsp;
+							<div id="total-group-ouro"  style="color: white;"><?php echo totalIventario($inventarios, 1,$heroi->heroi_id); ?></div>
 						</a> 
-						<a class="nav-link" id="v-pills-provisao-tab" data-toggle="pill" href="#v-pills-provisao"  role="tab" aria-controls="v-pills-provisao"  aria-selected="false">
-							<img alt="" src="image/Icon.4_50.png" style="width: 30px;">
+						<a class="nav-link d-flex" id="v-pills-provisao-tab" data-toggle="pill"	href="#v-pills-provisao"  role="tab" aria-controls="v-pills-provisao"  aria-selected="false">
+							<img alt="" src="image/Icon.4_50.png" style="width: 30px;">&nbsp;
+							<div id="total-group-provicao" style="color: white;"><?php echo totalIventario($inventarios, 2,$heroi->heroi_id); ?></div>
 						</a> 
-						<a class="nav-link" id="v-pills-equipamento-tab" data-toggle="pill" href="#v-pills-equipamento" role="tab" aria-controls="v-pills-equipamento" aria-selected="false">
-							<img alt="" src="image/Icon.6_94.png" style="width: 30px;">
+						<a class="nav-link d-flex" id="v-pills-equipamento-tab" data-toggle="pill" href="#v-pills-equipamento" role="tab" aria-controls="v-pills-equipamento" aria-selected="false">
+							<img alt="" src="image/Icon.6_94.png" style="width: 30px;">&nbsp;
+							<div id="total-group-equipamento" style="color: white;"><?php echo totalIventario($inventarios, 3,$heroi->heroi_id); ?></div>
 						</a> 
-						<a class="nav-link" id="v-pills-bonus-penalidade-tab" data-toggle="pill" href="#v-pills-bonus-penalidade" role="tab" aria-controls="v-pills-bonus-penalidade" aria-selected="false">
-							<img alt="" src="image/Icon.2_54.png" style="width: 30px;">
+						<a class="nav-link d-flex" id="v-pills-bonus-penalidade-tab" data-toggle="pill" href="#v-pills-bonus-penalidade" role="tab" aria-controls="v-pills-bonus-penalidade" aria-selected="false">
+							<img alt="" src="image/Icon.2_54.png" style="width: 30px;">&nbsp;
+							<div id="total-group-bonus" style="color: white;"><?php echo totalIventario($inventarios, 4,$heroi->heroi_id); ?></div>
 						</a> 
-						<a class="nav-link" id="v-pills-pista-tab" data-toggle="pill" href="#v-pills-pista" role="tab" aria-controls="v-pills-pista" aria-selected="false">
-							<img alt="" src="image/Icon.5_85.png" style="width: 30px;">
+						<a class="nav-link d-flex" id="v-pills-pista-tab" data-toggle="pill" href="#v-pills-pista" role="tab" aria-controls="v-pills-pista" aria-selected="false">
+							<img alt="" src="image/Icon.5_85.png" style="width: 30px;">&nbsp;
+							<div id="total-group-pista" style="color: white;"><?php echo totalIventario($inventarios, 5,$heroi->heroi_id); ?></div>
 						</a>
-						<a class="nav-link" id="v-pills-magias-tab" data-toggle="pill" href="#v-pills-magias" role="tab" aria-controls="v-pills-magias" aria-selected="false">
-							<img alt="" src="image/Icon.6_79.png" style="width: 30px;">
+						<a class="nav-link d-flex" id="v-pills-magias-tab" data-toggle="pill" href="#v-pills-magias" role="tab" aria-controls="v-pills-magias" aria-selected="false">
+							<img alt="" src="image/Icon.6_79.png" style="width: 30px;">&nbsp;
+							<div id="total-group-magias" style="color: white;"><?php echo totalIventario($inventarios, 6,$heroi->heroi_id); ?></div>
 						</a>
-						<a class="nav-link" id="v-pills-pericias-tab" data-toggle="pill" href="#v-pills-pericias" role="tab" aria-controls="v-pills-pericias" aria-selected="false">
-							<img alt="" src="image/Icon.4_80.png" style="width: 30px;">
+						<a class="nav-link d-flex" id="v-pills-pericias-tab" data-toggle="pill" href="#v-pills-pericias" role="tab" aria-controls="v-pills-pericias" aria-selected="false">
+							<img alt="" src="image/Icon.4_80.png" style="width: 30px;">&nbsp;
+							<div id="total-group-pericias" style="color: white;"><?php echo totalIventario($inventarios, 7,$heroi->heroi_id); ?></div>
 						</a>						
 					</div>
 				</div>
