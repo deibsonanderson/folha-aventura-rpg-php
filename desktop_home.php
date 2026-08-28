@@ -18,22 +18,22 @@ $conexao = $dados->conectarBanco();
 	<div class="container">
 		<div class="row">
     		<div class="col-4">
-            	<?php include('view/pc_status.php'); ?> 
+            	<?php include('view/desktop/desktop_status.php'); ?> 
             </div>
     		<div class="col-4">
-            	<?php include('view/pc_criatura.php'); ?>            	
+            	<?php include('view/desktop/desktop_criatura.php'); ?>            	
             </div>
     		<div class="col-4">
-            	<?php include('view/pc_dado.php'); ?>
+            	<?php include('view/desktop/desktop_dado.php'); ?>
             </div>
 		</div>			
 		<br/>
 		<div class="row">
 			<div class="col-6">
-          		<?php include('view/pc_inventario.php'); ?>          		
+          		<?php include('view/desktop/desktop_inventario.php'); ?>          		
         	</div>
 			<div class="col-6">
-          		<?php include('view/pc_rota.php'); ?>          		
+          		<?php include('view/desktop/desktop_rota.php'); ?>          		
         	</div>
 		</div>
 		<div class="row">
@@ -78,12 +78,12 @@ $conexao = $dados->conectarBanco();
         	</div>
 		</div>
 	</div>
-	<?php include('view/modal-inventario.php'); ?>
-	<?php include('view/modal-criatura.php'); ?>
-	<?php include('view/modal-veiculo.php'); ?>
-	<?php include('view/modal-rota.php'); ?>
-	<?php include('view/modal-inventario-excluir.php'); ?>
-	<?php include('view/modal-mensagem.php'); ?>
+	<?php include('view/modal/modal-inventario.php'); ?>
+	<?php include('view/modal/modal-criatura.php'); ?>
+	<?php include('view/modal/modal-veiculo.php'); ?>
+	<?php include('view/modal/modal-rota.php'); ?>
+	<?php include('view/modal/modal-inventario-excluir.php'); ?>
+	<?php include('view/modal/modal-mensagem.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

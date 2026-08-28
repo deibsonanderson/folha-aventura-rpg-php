@@ -22,12 +22,12 @@ $conexao = $dados->conectarBanco();
     	<?php include('view/rota.php'); ?> <!-- rota-tab -->
     	<?php include('view/dado.php'); ?> <!-- dado-tab -->
 	</div>
-	<?php include('view/modal-inventario.php'); ?>
-	<?php include('view/modal-criatura.php'); ?>
-	<?php include('view/modal-veiculo.php'); ?>
-	<?php include('view/modal-rota.php'); ?>
-	<?php include('view/modal-inventario-excluir.php'); ?>
-	<?php include('view/modal-mensagem.php'); ?>
+	<?php include('view/modal/modal-inventario.php'); ?>
+	<?php include('view/modal/modal-criatura.php'); ?>
+	<?php include('view/modal/modal-veiculo.php'); ?>
+	<?php include('view/modal/modal-rota.php'); ?>
+	<?php include('view/modal/modal-inventario-excluir.php'); ?>
+	<?php include('view/modal/modal-mensagem.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

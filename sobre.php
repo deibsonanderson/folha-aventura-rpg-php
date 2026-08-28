@@ -11,8 +11,8 @@
 			</div>
 		</div>
 	</div>
-	<?php include('view/modal-heroi.php'); ?>
-	<?php include('view/modal-heroi-criar.php'); ?>
+	<?php include('view/modal/modal-heroi.php'); ?>
+	<?php include('view/modal/modal-heroi-criar.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

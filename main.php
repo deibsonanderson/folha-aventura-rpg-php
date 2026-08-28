@@ -110,9 +110,9 @@ $herois = carregarHeroi($conexao,$_SESSION["login"]);
     		</div>
     	</div>	
 	</div>
-	<?php include('view/modal-heroi.php'); ?>
-	<?php include('view/modal-heroi-criar.php'); ?>
-	<?php include('view/modal-mensagem.php'); ?>
+	<?php include('view/modal/modal-heroi.php'); ?>
+	<?php include('view/modal/modal-heroi-criar.php'); ?>
+	<?php include('view/modal/modal-mensagem.php'); ?>
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -128,7 +128,7 @@ $( document ).ready(function() {
     if(isMobile == true){
 		$('#form-heroi').attr('action','home.php');
     }else if(isMobile == false){
-    	$('#form-heroi').attr('action','pc_home.php');
+    	$('#form-heroi').attr('action','desktop_home.php');
     }
 });
 
